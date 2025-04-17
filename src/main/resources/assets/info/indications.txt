@@ -1,0 +1,58 @@
+📊 Sistema de Control de Gastos Personales
+Usuarios, categorías de gasto, ingresos, saldos.
+
+Endpoint que te da un resumen mensual.
+
+Ideal para practicar consultas agrupadas y manejo de fechas.
+
+
+PROYECTO BACKEND
+
+User{
+ id
+ name
+ identification
+}
+
+Transaction{
+ id
+ amount
+ LocalDate craetedAt
+ ENUM t_type
+ User u
+ Category c
+}
+
+public enum TransactionType {
+    INCOME,
+    EXPENSE,
+    SAVINGS_IN,
+    SAVINGS_OUT,
+}
+
+Category{
+ name
+ description
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mappers existentes: Mapper DomainEntity general, Mapper Request General
+
+Anotaciones
+Independiente
+    Category : mapper general
+    User: mapper general
+
+Compuesto
+    Transaction: mapper domain to entity, mapper request to domain

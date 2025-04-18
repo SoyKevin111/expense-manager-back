@@ -1,7 +1,8 @@
 package com.example.expenseManager.personalFinance.infraestructure.adapter.in.rest;
 
-import com.example.expenseManager.personalFinance.application.request.CreateCategoryRequest;
+import com.example.expenseManager.personalFinance.application.request.category.CreateCategoryRequest;
 import com.example.expenseManager.core.mapper.RequestGeneralMapper;
+import com.example.expenseManager.personalFinance.application.request.category.IdCategoryRequest;
 import com.example.expenseManager.personalFinance.domain.models.Category;
 import com.example.expenseManager.personalFinance.domain.port.in.usecases.ICategoryUseCase;
 import jakarta.validation.Valid;
@@ -35,5 +36,9 @@ public class CategoryController {
       return this.categoryUseCase.findAll();
    }
 
+   @PostMapping("/categories/id")
+   public String validateId(@RequestBody @Valid IdCategoryRequest idCategoryRequest) {
+      return "ID: " + idCategoryRequest.getId() + " is valid.";
+   }
 
 }

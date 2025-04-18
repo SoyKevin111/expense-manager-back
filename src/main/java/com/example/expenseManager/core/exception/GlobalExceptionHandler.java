@@ -38,7 +38,6 @@ public class GlobalExceptionHandler {
       return ResponseEntity.badRequest().body(response);
    }
 
-
    //Validaciones Generica
    @ExceptionHandler(ServerInternalError.class)
    public ResponseEntity<Map<String, String>> handleGeneric(ServerInternalError ex) {

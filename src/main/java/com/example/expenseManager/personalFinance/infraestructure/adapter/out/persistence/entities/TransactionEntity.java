@@ -3,6 +3,7 @@ package com.example.expenseManager.personalFinance.infraestructure.adapter.out.p
 import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
 import com.example.expenseManager.user.infraestructure.adapter.out.persistence.UserEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -20,23 +21,24 @@ public class TransactionEntity {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    Long id;
 
-   //@NotNull(message = "Amount cannot be null")
+   @NotNull(message = "Amount cannot be null")
    BigDecimal amount;
 
    @Column(name = "created_at")
-   //@NotNull(message = "createdAt cannot be null")
+   @NotNull(message = "createdAt cannot be null")
    LocalDate createdAt;
 
    @Enumerated(EnumType.STRING)
    @Column(name = "type_transaction")
-   //@NotNull(message = "TypeTransaction cannot be null")
+   @NotNull(message = "TypeTransaction cannot be null")
    TypeTransaction typeTransaction;
 
-   @ManyToOne
+   @ManyToOne //cada una de las muchas transacciones solo tendran un usuario
    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
    UserEntity user;
 
-   @ManyToOne(cascade = CascadeType.PERSIST)
+   @ManyToOne
    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
    CategoryEntity category;
+
 }

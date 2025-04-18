@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryRequest {
+public class CreateCategoryRequest {
    @NotBlank(message = "No puede estar vacío ni en blanco")
    @Size(max = 30, message = "No debe exceder los 30 caracteres")
    String name;

@@ -1,6 +1,6 @@
 package com.example.expenseManager.personalFinance.infraestructure.adapter.in.rest;
 
-import com.example.expenseManager.personalFinance.application.request.CategoryRequest;
+import com.example.expenseManager.personalFinance.application.request.CreateCategoryRequest;
 import com.example.expenseManager.core.mapper.RequestGeneralMapper;
 import com.example.expenseManager.personalFinance.domain.models.Category;
 import com.example.expenseManager.personalFinance.domain.port.in.usecases.ICategoryUseCase;
@@ -17,13 +17,12 @@ public class CategoryController {
 
    @Autowired
    private ICategoryUseCase categoryUseCase;
-   //mapper
    @Autowired
    private RequestGeneralMapper requestMapper;
 
    @PostMapping("/categories")
-   public ResponseEntity<?> create(@RequestBody @Valid CategoryRequest categoryRequest) {
-      Category category = this.requestMapper.toDomain(categoryRequest, Category.class);
+   public ResponseEntity<?> create(@RequestBody @Valid CreateCategoryRequest createCategoryRequest) {
+      Category category = this.requestMapper.toDomain(createCategoryRequest, Category.class);
       Category categoryResponse = this.categoryUseCase.create(category);
       if (categoryResponse != null) {
          return ResponseEntity.ok().body(categoryResponse);
@@ -32,7 +31,7 @@ public class CategoryController {
    }
 
    @GetMapping("/categories")
-   public List<Category> findAll(){
+   public List<Category> findAll() {
       return this.categoryUseCase.findAll();
    }
 

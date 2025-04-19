@@ -1,7 +1,7 @@
 package com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.repositories;
 
 
-import com.example.expenseManager.core.mapper.EntityGeneralMapper;
+import com.example.expenseManager.core.application.mappers.EntityGeneralMapper;
 import com.example.expenseManager.personalFinance.domain.models.Category;
 import com.example.expenseManager.personalFinance.domain.port.out.repositories.ICategoryRepository;
 import com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.entities.CategoryEntity;

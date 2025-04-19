@@ -1,6 +1,6 @@
 package com.example.expenseManager.personalFinance.application.usecases;
 
-import com.example.expenseManager.core.exception.models.ServerInternalError;
+import com.example.expenseManager.core.application.exceptions.models.ServerInternalError;
 import com.example.expenseManager.personalFinance.domain.models.Category;
 import com.example.expenseManager.personalFinance.domain.port.in.usecases.ICategoryUseCase;
 import com.example.expenseManager.personalFinance.domain.port.out.repositories.ICategoryRepository;

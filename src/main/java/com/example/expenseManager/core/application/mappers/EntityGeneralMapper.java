@@ -1,4 +1,4 @@
-package com.example.expenseManager.core.mapper;
+package com.example.expenseManager.core.application.mappers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

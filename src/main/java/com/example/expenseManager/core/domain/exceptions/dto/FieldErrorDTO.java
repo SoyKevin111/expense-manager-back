@@ -1,4 +1,4 @@
-package com.example.expenseManager.core.validation.dto;
+package com.example.expenseManager.core.domain.exceptions.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -64,7 +64,7 @@ Este endpoint devuelve un resumen del mes con los totales de **ingresos**, **gas
 
 1. Clona el repositorio:
     ```bash
-    git clone https://github.com/tu_usuario/sistema-control-gastos.git
+    git clone https://github.com/SoyKevin111/expense-manager-back.git
     ```
 
 2. Accede al directorio del proyecto:

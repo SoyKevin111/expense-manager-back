@@ -18,8 +18,8 @@ public class UserRepository implements IUserRepository {
    private EntityGeneralMapper mapper;
 
    @Override
-   public User save(User User) {
-      UserEntity userEntity = mapper.toEntity(User, UserEntity.class);
+   public User save(User user) {
+      UserEntity userEntity = mapper.toEntity(user, UserEntity.class);
       return mapper.toDomain(userRepository.save(userEntity), User.class);
    }
 
@@ -30,11 +30,14 @@ public class UserRepository implements IUserRepository {
 
    @Override
    public Optional<User> findById(Long id) {
-      return Optional.empty();
+      return this.userRepository.findById(id).map(userEntity -> this.mapper.toDomain(userEntity, User.class));
    }
 
    @Override
    public List<User> findAll() {
-      return List.of();
+      return ((List<UserEntity>) this.userRepository.findAll())
+         .stream()
+         .map(userEntity -> this.mapper.toDomain(userEntity, User.class))
+         .toList();
    }
 }

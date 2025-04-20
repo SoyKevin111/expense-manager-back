@@ -19,22 +19,12 @@ public class UserUseCase implements IUserUseCase {
    private IUserRepository userRepository;
 
    @Override
-   public User create(User user) { //sin id
+   public User save(User user) { //con id || sin id
       try {
          return userRepository.save(user);
       } catch (Exception e) {
          log.error(e.getMessage());
-         throw new ServerInternalError("Error creating user");
-      }
-   }
-
-   @Override
-   public User update(User user) { //con id
-      try {
-         return userRepository.save(user);
-      } catch (Exception e) {
-         log.error(e.getMessage());
-         throw new ServerInternalError("Error updating user");
+         throw new ServerInternalError(user.getId().toString().isEmpty() ? "Error creating user" : "Error updating user");
       }
    }
 

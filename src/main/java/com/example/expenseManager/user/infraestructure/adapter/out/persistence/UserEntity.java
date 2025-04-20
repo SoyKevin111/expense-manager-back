@@ -21,4 +21,7 @@ public class UserEntity {
 
    @NotBlank(message = "Not null or empty")
    String identification;
+
+   @NotBlank(message = "Not null or empty")
+   String email;
 }

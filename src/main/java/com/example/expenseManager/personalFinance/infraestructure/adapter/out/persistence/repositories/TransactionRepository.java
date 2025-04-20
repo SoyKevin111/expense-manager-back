@@ -16,8 +16,7 @@ public class TransactionRepository implements ITransactionRepository {
    }
 
    @Override
-   public int deleteById(Long id) {
-      return 0;
+   public void deleteById(Long id) {
    }
 
    @Override

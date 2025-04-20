@@ -16,9 +16,13 @@ public class UserEntity {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    Long id;
 
-   @NotBlank(message = "Not null or empty")
+   @Column(nullable = true)
    String name;
 
-   @NotBlank(message = "Not null or empty")
+   @Column(nullable = true, unique = true)
    String identification;
+
+   @Column(nullable = true, unique = true)
+   @NotBlank(message = "Not null or empty")
+   String email;
 }

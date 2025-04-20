@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
       Map<String, Object> response = Map.of(
          "timestamp", LocalDateTime.now(),
          "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-         "error", "[Server Error]",
+         "error", "[Server Internal Error]",
          "message", ex.getMessage().isEmpty() ? "Server Internal Error" : ex.getMessage()
       );
       return ResponseEntity

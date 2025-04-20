@@ -1,4 +1,4 @@
-package com.example.expenseManager.user.application.usecase;
+package com.example.expenseManager.user.application;
 
 import com.example.expenseManager.core.application.exceptions.models.ServerInternalError;
 import com.example.expenseManager.user.domain.User;

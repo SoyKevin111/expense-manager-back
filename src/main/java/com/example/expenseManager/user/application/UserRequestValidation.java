@@ -1,8 +1,8 @@
-package com.example.expenseManager.user.application.validation;
+package com.example.expenseManager.user.application;
 
 import com.example.expenseManager.core.application.exceptions.models.ConflictValidationException;
-import com.example.expenseManager.user.application.request.CreateUserRequest;
-import com.example.expenseManager.user.application.request.UpdateUserRequest;
+import com.example.expenseManager.user.application.dto.request.CreateUserRequest;
+import com.example.expenseManager.user.application.dto.request.UpdateUserRequest;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.out.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

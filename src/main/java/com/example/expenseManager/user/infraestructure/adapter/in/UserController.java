@@ -1,10 +1,10 @@
 package com.example.expenseManager.user.infraestructure.adapter.in;
 
 import com.example.expenseManager.core.application.mappers.RequestGeneralMapper;
-import com.example.expenseManager.user.application.mapping.UserUpdaterMapping;
-import com.example.expenseManager.user.application.request.CreateUserRequest;
-import com.example.expenseManager.user.application.request.UpdateUserRequest;
-import com.example.expenseManager.user.application.validation.UserRequestValidation;
+import com.example.expenseManager.user.application.UserUpdaterMapping;
+import com.example.expenseManager.user.application.dto.request.CreateUserRequest;
+import com.example.expenseManager.user.application.dto.request.UpdateUserRequest;
+import com.example.expenseManager.user.application.UserRequestValidation;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.in.IUserUseCase;
 import jakarta.validation.Valid;

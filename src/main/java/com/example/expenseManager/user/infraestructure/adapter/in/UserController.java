@@ -4,6 +4,7 @@ import com.example.expenseManager.core.application.mappers.RequestGeneralMapper;
 import com.example.expenseManager.user.application.mapping.UserUpdaterMapping;
 import com.example.expenseManager.user.application.request.CreateUserRequest;
 import com.example.expenseManager.user.application.request.UpdateUserRequest;
+import com.example.expenseManager.user.application.validation.UserRequestValidation;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.in.IUserUseCase;
 import jakarta.validation.Valid;
@@ -21,9 +22,12 @@ public class UserController {
    private RequestGeneralMapper requestMapper;
    @Autowired
    private UserUpdaterMapping userUpdaterMapping;
+   @Autowired
+   private UserRequestValidation userRequestValidation;
 
    @PostMapping("/users")
    public ResponseEntity<?> create(@RequestBody @Valid CreateUserRequest createUserRequest) {
+      this.userRequestValidation.validateCreate(createUserRequest); //validation conflict email, identification
       User user = this.requestMapper.toDomain(createUserRequest, User.class);
       User userResponse = this.userUseCase.save(user);
       return ResponseEntity.ok().body(userResponse);
@@ -31,6 +35,7 @@ public class UserController {
 
    @PutMapping("/users/{id}") //free name, email
    public ResponseEntity<?> update(@RequestBody @Valid UpdateUserRequest updateUserRequest, @PathVariable Long id) {
+      this.userRequestValidation.validateUpdate(updateUserRequest, id); //validation conflict email
       User user = this.userUpdaterMapping.userUpdater(updateUserRequest, id);
       User userResponse = this.userUseCase.save(user); //with id
       return ResponseEntity.ok().body(userResponse);

@@ -40,4 +40,14 @@ public class UserRepository implements IUserRepository {
          .map(userEntity -> this.mapper.toDomain(userEntity, User.class))
          .toList();
    }
+
+   @Override
+   public boolean existsByEmail(String email) {
+      return this.userRepository.existsByEmail(email);
+   }
+
+   @Override
+   public boolean existsByIdentification(String identification) {
+      return this.userRepository.existsByIdentification(identification);
+   }
 }

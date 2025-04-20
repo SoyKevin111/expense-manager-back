@@ -9,9 +9,9 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class CreateUserRequest {
+
    @NotBlank(message = "Name cannot be blank")
    @Size(min = 5, max = 40, message = "Name must be between 3and 50 characters")
    String name;

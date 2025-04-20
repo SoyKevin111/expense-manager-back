@@ -21,8 +21,12 @@ public class UserUpdaterMapping {
       Optional<User> userOptional = userRepository.findById(userId);
       if (userOptional.isPresent()) {
          User user = userOptional.get();
-         user.setName(updateUserRequest.getName());
-         user.setEmail(updateUserRequest.getEmail());
+         if (!(updateUserRequest.getName() == null || updateUserRequest.getName().isEmpty())) {
+            user.setName(updateUserRequest.getName());
+         }
+         if (!(updateUserRequest.getEmail() == null || updateUserRequest.getEmail().isEmpty())) {
+            user.setEmail(updateUserRequest.getEmail());
+         }
          return user;
       }
       throw new ServerInternalError("User not found");

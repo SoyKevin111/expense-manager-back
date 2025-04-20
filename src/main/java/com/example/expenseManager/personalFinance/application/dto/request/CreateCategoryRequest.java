@@ -1,4 +1,4 @@
-package com.example.expenseManager.personalFinance.application.request;
+package com.example.expenseManager.personalFinance.application.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

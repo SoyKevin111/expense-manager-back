@@ -26,20 +26,30 @@ public class UserController {
    public ResponseEntity<?> create(@RequestBody @Valid CreateUserRequest createUserRequest) {
       User user = this.requestMapper.toDomain(createUserRequest, User.class);
       User userResponse = this.userUseCase.save(user);
-      if (userResponse != null) {
-         return ResponseEntity.ok().body(userResponse);
-      }
-      return ResponseEntity.badRequest().build();
+      return ResponseEntity.ok().body(userResponse);
    }
 
    @PutMapping("/users/{id}") //free name, email
    public ResponseEntity<?> update(@RequestBody @Valid UpdateUserRequest updateUserRequest, @PathVariable Long id) {
       User user = this.userUpdaterMapping.userUpdater(updateUserRequest, id);
       User userResponse = this.userUseCase.save(user); //with id
-      if (userResponse != null) {
-         return ResponseEntity.ok().body(userResponse);
-      }
-      return ResponseEntity.badRequest().build();
+      return ResponseEntity.ok().body(userResponse);
+   }
+
+   @DeleteMapping("/users/{id}")
+   public ResponseEntity<?> delete(@PathVariable Long id) {
+      this.userUseCase.delete(id);
+      return ResponseEntity.ok().build();
+   }
+
+   @GetMapping("/users/{id}")
+   public ResponseEntity<?> findById(@PathVariable Long id) {
+      return ResponseEntity.ok().body(this.userUseCase.findById(id));
+   }
+
+   @GetMapping("/users")
+   public ResponseEntity<?> findAll() {
+      return ResponseEntity.ok().body(this.userUseCase.findAll());
    }
 
 

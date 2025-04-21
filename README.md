@@ -1,4 +1,4 @@
-# 📊 Sistema de Control de Gastos Personales
+# 📊 Sistema de Control de Gastos Personales (Backend)
 
 **Proyecto para gestionar los gastos personales, ingresos, saldos y categorías.**
 

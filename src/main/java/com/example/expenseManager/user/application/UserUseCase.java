@@ -1,6 +1,5 @@
 package com.example.expenseManager.user.application;
 
-import com.example.expenseManager.core.application.exceptions.models.ConflictValidationException;
 import com.example.expenseManager.core.application.exceptions.models.ServerInternalError;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.in.IUserUseCase;
@@ -33,7 +32,10 @@ public class UserUseCase implements IUserUseCase {
          return userRepository.save(user);
       } catch (Exception e) {
          log.error(e.getMessage());
-         throw new ServerInternalError(user.getId().toString().isEmpty() ? "Error creating user" : "Error updating user");
+         throw new ServerInternalError(
+            user.getId() == null || user.getId().toString().isEmpty()
+               ? "Error creating user"
+               : "Error updating user");
       }
    }
 

@@ -1,6 +1,7 @@
 package com.example.expenseManager.personalFinance.domain.port.out.repositories;
 
 import com.example.expenseManager.personalFinance.domain.models.Transaction;
+import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,5 +13,5 @@ public interface ITransactionRepository {
    void deleteById(Long id);
    Optional<Transaction> findById(Long id);
    List<Transaction> findAll();
-   BigDecimal summaryForTypeAndMonthly(String type, Long userId, int mes); //ingreso, gasto, entrada de ahorro o salida de ahorro.
+   BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes); //ingreso, gasto, entrada de ahorro o salida de ahorro.
 }

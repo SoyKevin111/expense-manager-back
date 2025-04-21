@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryUseCase implements ICategoryUseCase {
@@ -28,6 +29,15 @@ public class CategoryUseCase implements ICategoryUseCase {
    public List<Category> findAll() {
       try {
          return this.categoryRepository.findAll();
+      } catch (Exception e) {
+         throw new ServerInternalError();
+      }
+   }
+
+   @Override
+   public Optional<Category> findById(Long id) {
+      try {
+         return this.categoryRepository.findById(id);
       } catch (Exception e) {
          throw new ServerInternalError();
       }

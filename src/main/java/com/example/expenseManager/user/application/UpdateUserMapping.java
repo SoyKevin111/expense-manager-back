@@ -3,18 +3,18 @@ package com.example.expenseManager.user.application;
 import com.example.expenseManager.core.application.exceptions.models.ServerInternalError;
 import com.example.expenseManager.user.application.dto.request.UpdateUserRequest;
 import com.example.expenseManager.user.domain.User;
-import com.example.expenseManager.user.domain.port.in.IUserUseCase;
+import com.example.expenseManager.user.domain.port.out.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserUpdaterMapping {
+public class UpdateUserMapping {
 
    @Autowired
-   IUserUseCase userUseCase;
+   IUserRepository userRepository;
 
-   public User userUpdater(UpdateUserRequest updateUserRequest, Long userId) {
-      User user = userUseCase.findById(userId)
+   public User toDomainModel(UpdateUserRequest updateUserRequest, Long userId) {
+      User user = userRepository.findById(userId)
          .orElseThrow(() -> new ServerInternalError("User not found"));
       if (!(updateUserRequest.getName() == null || updateUserRequest.getName().isEmpty())) {
          user.setName(updateUserRequest.getName());

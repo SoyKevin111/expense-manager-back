@@ -18,7 +18,7 @@ public class IdExistenceValidator {
       this.repositories = repository;
    }
 
-   public void validateExists(Class<?> entityClass, Long id) {
+   public void validateExistsException(Class<?> entityClass, Long id) {
       JpaRepository<?, Long> repo = repositories.get(entityClass);
       if (repo == null) {
          throw new ServerInternalError("Repository not found for entity class: " + entityClass.getSimpleName());
@@ -26,5 +26,13 @@ public class IdExistenceValidator {
       if (repo.existsById(id)) {
          throw new ConflictValidationException("Id already exists: " + id);
       }
+   }
+
+   public boolean validateExists(Class<?> entityClass, Long id) {
+      JpaRepository<?, Long> repo = repositories.get(entityClass);
+      if (repo == null) {
+         throw new ServerInternalError("Repository not found for entity class: " + entityClass.getSimpleName());
+      }
+      return repo.existsById(id);
    }
 }

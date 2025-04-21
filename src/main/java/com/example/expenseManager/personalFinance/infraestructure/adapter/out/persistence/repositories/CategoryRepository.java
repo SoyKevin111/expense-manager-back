@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CategoryRepository implements ICategoryRepository {
@@ -31,5 +32,11 @@ public class CategoryRepository implements ICategoryRepository {
          .stream()
          .map(entity -> this.generalMapper.toDomain(entity, Category.class))
          .toList();
+   }
+
+   @Override
+   public Optional<Category> findById(Long id) {
+      return this.categoryRepository.findById(id)
+         .map(entity -> this.generalMapper.toDomain(entity, Category.class));
    }
 }

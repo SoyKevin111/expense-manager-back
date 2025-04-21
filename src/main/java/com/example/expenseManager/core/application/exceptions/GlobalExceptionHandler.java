@@ -4,8 +4,10 @@ import com.example.expenseManager.core.application.exceptions.models.ConflictVal
 import com.example.expenseManager.core.application.exceptions.models.ServerInternalError;
 import com.example.expenseManager.core.domain.exceptions.ExceptionErrorResponse;
 import com.example.expenseManager.core.domain.exceptions.dto.FieldErrorDTO;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -68,6 +70,27 @@ public class GlobalExceptionHandler {
          .status(HttpStatus.INTERNAL_SERVER_ERROR)
          .body(response);
    }
+
+   //Validacion de Enum
+   @ExceptionHandler(HttpMessageNotReadableException.class)
+   public ResponseEntity<Map<String, Object>> handleInvalidEnum(HttpMessageNotReadableException ex) {
+      if (ex.getCause() instanceof InvalidFormatException) {
+         InvalidFormatException ife = (InvalidFormatException) ex.getCause();
+         if (ife.getTargetType().isEnum()) {
+            Map<String, Object> response = Map.of(
+               "timestamp", LocalDateTime.now(),
+               "status", HttpStatus.BAD_REQUEST.value(),
+               "error", "[Transaction Type]",
+               "message", "Tipo de transacción no válida: " + ife.getValue()
+            );
+            return ResponseEntity
+               .status(HttpStatus.BAD_REQUEST)
+               .body(response);
+         }
+      }
+      return null;
+   }
+
 }
 
 

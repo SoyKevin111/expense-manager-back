@@ -33,10 +33,7 @@ public class CategoryController {
    public ResponseEntity<?> create(@RequestBody @Valid CreateCategoryRequest createCategoryRequest) {
       Category category = this.requestMapper.toDomain(createCategoryRequest, Category.class);
       Category categoryResponse = this.categoryUseCase.create(category);
-      if (categoryResponse != null) {
-         return ResponseEntity.ok().body(categoryResponse);
-      }
-      return ResponseEntity.badRequest().build();
+      return ResponseEntity.ok().body(categoryResponse);
    }
 
    @GetMapping("/categories")
@@ -47,7 +44,7 @@ public class CategoryController {
 
    @GetMapping("/categories/{id}")
    public String verificacion(@PathVariable Long id) {
-      idExistenceValidator.validateExists(CategoryEntity.class, id);
+      idExistenceValidator.validateExistsException(CategoryEntity.class, id);
       return "El id esta disponible";
    }
 

@@ -1,7 +1,7 @@
 package com.example.expenseManager.user.infraestructure.adapter.in;
 
 import com.example.expenseManager.core.application.mappers.RequestGeneralMapper;
-import com.example.expenseManager.user.application.UserUpdaterMapping;
+import com.example.expenseManager.user.application.UpdateUserMapping;
 import com.example.expenseManager.user.application.dto.request.CreateUserRequest;
 import com.example.expenseManager.user.application.dto.request.UpdateUserRequest;
 import com.example.expenseManager.user.domain.User;
@@ -20,7 +20,7 @@ public class UserController {
    @Autowired
    private RequestGeneralMapper requestMapper;
    @Autowired
-   private UserUpdaterMapping userUpdaterMapping;
+   private UpdateUserMapping updateUserMapping;
 
    @PostMapping("/users")
    public ResponseEntity<?> create(@RequestBody @Valid CreateUserRequest createUserRequest) {
@@ -31,7 +31,7 @@ public class UserController {
 
    @PutMapping("/users/{id}") //free name, email
    public ResponseEntity<?> update(@RequestBody @Valid UpdateUserRequest updateUserRequest, @PathVariable Long id) {
-      User user = this.userUpdaterMapping.userUpdater(updateUserRequest, id);
+      User user = this.updateUserMapping.toDomainModel(updateUserRequest, id);
       User userResponse = this.userUseCase.save(user); //with id
       return ResponseEntity.ok().body(userResponse);
    }

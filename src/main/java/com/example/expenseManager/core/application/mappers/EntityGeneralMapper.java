@@ -17,4 +17,8 @@ public class EntityGeneralMapper {
       return mapper.map(domainObject, entityClass);
    }
 
+   public <I, O> I toRequest(O domainObject, Class<I> entityClass) {
+      return mapper.map(domainObject, entityClass);
+   }
+
 }

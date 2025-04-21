@@ -56,7 +56,7 @@ Este sistema permite a los usuarios registrar sus transacciones, clasificarlas e
 
 Para obtener un resumen de tus gastos e ingresos del mes.
 ### En proceso 🏗️
-### `GET /api/summary/monthly` 
+### `GET /manager/request/transactions/monthly` 
 
 Este endpoint devuelve un resumen del mes con los totales de **ingresos**, **gastos** y **ahorros**.
 
@@ -80,7 +80,8 @@ Este endpoint devuelve un resumen del mes con los totales de **ingresos**, **gas
 
 ### Avances ⏭️
 
-| ![api1](./src/main/resources/assets/avances/Screenshot%202025-04-19%20213456.png) | ![api2](./src/main/resources/assets/avances/Screenshot%202025-04-19%20200519.png) |
-|-----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
-| ![api3](./src/main/resources/assets/avances/Screenshot%202025-04-19%20200625.png) | ![api4](./src/main/resources/assets/avances/Screenshot%202025-04-19%20200637.png) |
-| ![api5](./src/main/resources/assets/avances/Screenshot%202025-04-19%20213302.png) |                                                                                   |
+| ![api5](./src/main/resources/assets/avances/image-6.png) | ![api5](./src/main/resources/assets/avances/image-7.png)   |
+|----------------------------------------------------------|------------------------------------------------------------|
+| ![api5](./src/main/resources/assets/avances/image-8.png) | ![api5](./src/main/resources/assets/avances/image-999.png) |
+
+#### ver mas resultados en: ``src/main/resources/assets/avances``

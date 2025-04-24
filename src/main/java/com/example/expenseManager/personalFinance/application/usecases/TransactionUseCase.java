@@ -6,6 +6,10 @@ import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
 import com.example.expenseManager.personalFinance.domain.port.in.usecases.ITransactionUseCase;
 import com.example.expenseManager.personalFinance.domain.port.out.repositories.ITransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -57,5 +61,14 @@ public class TransactionUseCase implements ITransactionUseCase {
    @Override
    public BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes) {
       return this.transactionRepository.summaryForTypeAndMonthly(type, userId, mes);
+   }
+
+   @Override
+   public Page<Transaction> findAllPage(Pageable pageable) {
+      try {
+         return this.transactionRepository.findAllPage(pageable);
+      } catch (Exception e) {
+         throw new ServerInternalError("Error finding all transactions with pagination");
+      }
    }
 }

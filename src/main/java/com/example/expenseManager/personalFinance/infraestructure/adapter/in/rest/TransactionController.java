@@ -1,5 +1,6 @@
 package com.example.expenseManager.personalFinance.infraestructure.adapter.in.rest;
 
+import com.example.expenseManager.core.application.dto.PagesRequest;
 import com.example.expenseManager.personalFinance.application.dto.request.CreateTransactionRequest;
 import com.example.expenseManager.personalFinance.application.dto.request.MonthlySummaryRequest;
 import com.example.expenseManager.personalFinance.application.handler.GetMonthlySummaryHandler;
@@ -8,6 +9,9 @@ import com.example.expenseManager.personalFinance.domain.models.Transaction;
 import com.example.expenseManager.personalFinance.domain.port.in.usecases.ITransactionUseCase;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +45,13 @@ public class TransactionController {
       return this.transactionUseCase.findAll();
    }
 
-
+   @GetMapping("transactions/page")
+   public ResponseEntity<?> findAllPage(@RequestBody @Valid PagesRequest pagesRequest) {
+      Pageable pageable = PageRequest.of(
+         pagesRequest.getPage(),
+         pagesRequest.getSize(),
+         Sort.by(pagesRequest.getSortBy())
+      );
+      return ResponseEntity.ok(this.transactionUseCase.findAllPage(pageable));
+   }
 }

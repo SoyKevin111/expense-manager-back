@@ -2,6 +2,8 @@ package com.example.expenseManager.personalFinance.infraestructure.adapter.out.p
 
 import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
 import com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.entities.TransactionEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +13,8 @@ import java.math.BigDecimal;
 
 @Repository
 public interface TransactionRepositoryPostgresql extends JpaRepository<TransactionEntity, Long> {
+
+   Page<TransactionEntity> findAll(Pageable pageable);
 
    @Query("SELECT SUM(t.amount) FROM TransactionEntity t " +
       "WHERE t.typeTransaction = :typeTransaction " +

@@ -7,9 +7,10 @@ import com.example.expenseManager.personalFinance.domain.port.out.repositories.I
 import com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.entities.CategoryEntity;
 import com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.entities.TransactionEntity;
 import com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.repositories.postgresql.TransactionRepositoryPostgresql;
-import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.infraestructure.adapter.out.persistence.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -60,5 +61,11 @@ public class TransactionRepository implements ITransactionRepository {
    @Override
    public BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes) {
       return this.transactionRepository.summaryForTypeAndMonthly(type, userId, mes);
+   }
+
+   @Override
+   public Page<Transaction> findAllPage(Pageable pageable) {
+      return this.transactionRepository.findAll(pageable)
+         .map(transactionEntity -> this.entityGeneralMapper.toDomain(transactionEntity, Transaction.class));
    }
 }

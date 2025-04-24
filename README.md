@@ -83,6 +83,7 @@ Este endpoint devuelve un resumen del mes con los totales de **ingresos**, **gas
 | ![api5](./src/main/resources/assets/avances/image-6.png) | ![api5](./src/main/resources/assets/avances/image-7.png)   |
 |----------------------------------------------------------|------------------------------------------------------------|
 | ![api5](./src/main/resources/assets/avances/image-8.png) | ![api5](./src/main/resources/assets/avances/image-999.png) |
+
 ![api5](./src/main/resources/assets/avances/image-10.png)
 ![api5](./src/main/resources/assets/avances/image-11.png)
 

@@ -4,12 +4,12 @@ INSERT INTO roles (role_name) VALUES
 ('USER');
 
 -- Usuarios
-INSERT INTO "user" (username, email, password, role) VALUES
-('Alice', 'alice@example.com', 'ID001', 'ADMIN'),
-('Bob', 'bob@example.com', 'ID002', 'USER'),
-('Charlie', 'charlie@example.com', 'ID003', 'USER'),
-('Diana', 'diana@example.com', 'ID004', 'USER'),
-('Ethan', 'ethan@example.com', 'ID005', 'USER');
+INSERT INTO "user" (username, email, password, role_id) VALUES
+('Alice', 'alice@example.com', 'ID001', 1),
+('Bob', 'bob@example.com', 'ID002', 2),
+('Charlie', 'charlie@example.com', 'ID003', 2),
+('Diana', 'diana@example.com', 'ID004', 2),
+('Ethan', 'ethan@example.com', 'ID005',2);
 
 
 --Categorías

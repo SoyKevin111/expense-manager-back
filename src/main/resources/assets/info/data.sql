@@ -1,10 +1,16 @@
+-- Roles
+INSERT INTO roles (role_name) VALUES
+('ADMIN'),
+('USER');
+
 -- Usuarios
-INSERT INTO "user" (name, identification, email) VALUES
-('Alice', 'ID001', 'alice@example.com'),
-('Bob', 'ID002', 'bob@example.com'),
-('Charlie', 'ID003', 'charlie@example.com'),
-('Diana', 'ID004', 'diana@example.com'),
-('Ethan', 'ID005', 'ethan@example.com');
+INSERT INTO "user" (username, email, password, role) VALUES
+('Alice', 'alice@example.com', 'ID001', 'ADMIN'),
+('Bob', 'bob@example.com', 'ID002', 'USER'),
+('Charlie', 'charlie@example.com', 'ID003', 'USER'),
+('Diana', 'diana@example.com', 'ID004', 'USER'),
+('Ethan', 'ethan@example.com', 'ID005', 'USER');
+
 
 --Categorías
 INSERT INTO category (name, description) VALUES

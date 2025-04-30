@@ -70,12 +70,13 @@ public class UserUseCase implements IUserUseCase {
    }
 
    @Override
-   public boolean existsByEmail(String email) {
-      return userRepository.existsByEmail(email);
+   public User updateProfile(User user) {
+      try {
+         return this.userRepository.save(user);
+      } catch (Exception e) {
+         log.error(e.getMessage());
+         throw new ServerInternalError("Error updating user profile");
+      }
    }
 
-   @Override
-   public boolean existsByIdentification(String identification) {
-      return this.userRepository.existsByIdentification(identification);
-   }
 }

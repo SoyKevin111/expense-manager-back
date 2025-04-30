@@ -2,16 +2,16 @@ package com.example.expenseManager.user.domain;
 
 import lombok.*;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class Role {
    Long id;
-   String username;
-   String email;
-   String password;
-   Role role;
+   RoleEnum roleEnum;
+
+   public Role(RoleEnum roleEnum) {
+      this.roleEnum = roleEnum;
+   }
 }

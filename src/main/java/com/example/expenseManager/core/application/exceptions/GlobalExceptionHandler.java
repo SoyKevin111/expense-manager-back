@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,22 @@ public class GlobalExceptionHandler {
          .body(response);
    }
 
+
+    //Validaciones de propiedades genericas
+   @ExceptionHandler(IllegalArgumentException.class)
+   public ResponseEntity<Map<String, Object>> handleSimpleError(IllegalArgumentException ex) {
+      Map<String, Object> error = new HashMap<>();
+      error.put("timestamp", LocalDateTime.now());
+      error.put("status", HttpStatus.BAD_REQUEST.value());
+      error.put("error", "[Request Error]");
+      error.put("message", ex.getMessage());
+
+      return ResponseEntity
+         .status(HttpStatus.BAD_REQUEST)
+         .body(error);
+   }
+
+
    //Validaciones personalizadas de conflictos en la base de datos
    @ExceptionHandler(ConflictValidationException.class)
    public ResponseEntity<Map<String, Object>> handleConflict(
@@ -63,7 +80,7 @@ public class GlobalExceptionHandler {
       Map<String, Object> response = Map.of(
          "timestamp", LocalDateTime.now(),
          "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-         "error", "[Server Internal Error]",
+         "error", ex.getError().isEmpty() ? "[Server Internal Error]" : ex.getError(),
          "message", ex.getMessage().isEmpty() ? "Server Internal Error" : ex.getMessage()
       );
       return ResponseEntity
@@ -74,14 +91,13 @@ public class GlobalExceptionHandler {
    //Validacion de Enum
    @ExceptionHandler(HttpMessageNotReadableException.class)
    public ResponseEntity<Map<String, Object>> handleInvalidEnum(HttpMessageNotReadableException ex) {
-      if (ex.getCause() instanceof InvalidFormatException) {
-         InvalidFormatException ife = (InvalidFormatException) ex.getCause();
+      if (ex.getCause() instanceof InvalidFormatException ife) {
          if (ife.getTargetType().isEnum()) {
             Map<String, Object> response = Map.of(
                "timestamp", LocalDateTime.now(),
                "status", HttpStatus.BAD_REQUEST.value(),
-               "error", "[Transaction Type]",
-               "message", "Tipo de transacción no válida: " + ife.getValue()
+               "error", "[Enum Type]",
+               "message", "Tipo de Enum no válido: " + ife.getValue()
             );
             return ResponseEntity
                .status(HttpStatus.BAD_REQUEST)
@@ -101,7 +117,7 @@ public class GlobalExceptionHandler {
   "error": "[Request Error]",
   "errors": [
     {
-      "field": "name",
+      "field": "username",
       "message": "Name is required"
     },
     {

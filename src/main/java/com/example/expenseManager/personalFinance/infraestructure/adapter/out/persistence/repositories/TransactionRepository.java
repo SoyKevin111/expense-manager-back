@@ -7,7 +7,7 @@ import com.example.expenseManager.personalFinance.domain.port.out.repositories.I
 import com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.entities.CategoryEntity;
 import com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.entities.TransactionEntity;
 import com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.repositories.postgresql.TransactionRepositoryPostgresql;
-import com.example.expenseManager.user.infraestructure.adapter.out.persistence.UserEntity;
+import com.example.expenseManager.user.infraestructure.adapter.out.persistence.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

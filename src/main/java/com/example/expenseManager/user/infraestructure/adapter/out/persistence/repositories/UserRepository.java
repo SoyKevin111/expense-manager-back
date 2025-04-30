@@ -1,8 +1,10 @@
-package com.example.expenseManager.user.infraestructure.adapter.out.persistence;
+package com.example.expenseManager.user.infraestructure.adapter.out.persistence.repositories;
 
 import com.example.expenseManager.core.application.mappers.EntityGeneralMapper;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.out.IUserRepository;
+import com.example.expenseManager.user.infraestructure.adapter.out.persistence.entity.RoleEntity;
+import com.example.expenseManager.user.infraestructure.adapter.out.persistence.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +22,8 @@ public class UserRepository implements IUserRepository {
    @Override
    public User save(User user) {
       UserEntity userEntity = mapper.toEntity(user, UserEntity.class);
+      RoleEntity roleEntity = mapper.toEntity(user.getRole(), RoleEntity.class);
+      userEntity.setRole(roleEntity);
       return mapper.toDomain(userRepository.save(userEntity), User.class);
    }
 
@@ -46,8 +50,4 @@ public class UserRepository implements IUserRepository {
       return this.userRepository.existsByEmail(email);
    }
 
-   @Override
-   public boolean existsByIdentification(String identification) {
-      return this.userRepository.existsByIdentification(identification);
-   }
 }

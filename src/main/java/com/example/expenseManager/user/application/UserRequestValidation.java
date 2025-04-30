@@ -16,9 +16,6 @@ public class UserRequestValidation {
       if (this.userRepository.existsByEmail(user.getEmail())) {
          throw new ConflictValidationException("Email already exists");
       }
-      if (this.userRepository.existsByIdentification(user.getIdentification())) {
-         throw new ConflictValidationException("Identification already exists");
-      }
    }
 
    public void validateForUpdate(User user) {

@@ -1,9 +1,6 @@
 package com.example.expenseManager.user.application.dto.request;
 
-import com.example.expenseManager.user.domain.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.example.expenseManager.user.domain.RoleEnum;
 import lombok.*;
 
 @Getter
@@ -14,7 +11,7 @@ public class UpdateUserRequest {
    String username;
    String email;
    String password;
-   Role role;
+   RoleEnum role;
 
    public boolean isValidUsername() {
       if (username == null || username.isBlank()) {

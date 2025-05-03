@@ -13,5 +13,5 @@ public class User {
    String username;
    String email;
    String password;
-   Role role;
+   RoleEnum role;
 }

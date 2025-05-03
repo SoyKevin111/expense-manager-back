@@ -6,7 +6,6 @@ import com.example.expenseManager.user.application.UpdateUserMapping;
 import com.example.expenseManager.user.application.dto.request.CreateUserRequest;
 import com.example.expenseManager.user.application.dto.request.UpdateProfileRequest;
 import com.example.expenseManager.user.application.dto.request.UpdateUserRequest;
-import com.example.expenseManager.user.application.validation.CreateUserValidator;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.in.IUserUseCase;
 import jakarta.validation.Valid;
@@ -26,12 +25,10 @@ public class UserController {
    private UpdateUserMapping updateUserMapping;
    @Autowired
    private UpdateProfileMapping updateProfileMapping;
-   @Autowired
-   private CreateUserValidator createUserValidator;
 
    @PostMapping("/users")
-   public ResponseEntity<?> create(@RequestBody CreateUserRequest createUserRequest) {
-      User user = this.requestMapper.toDomain(createUserValidator.validate(createUserRequest), User.class); //valida y mapea datos.
+   public ResponseEntity<?> create(@RequestBody @Valid CreateUserRequest createUserRequest) {
+      User user = this.requestMapper.toDomain(createUserRequest, User.class); //valida y mapea datos.
       User userResponse = this.userUseCase.save(user);
       return ResponseEntity.ok().body(userResponse);
    }

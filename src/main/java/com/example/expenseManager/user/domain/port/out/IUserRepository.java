@@ -11,4 +11,5 @@ public interface IUserRepository {
    Optional<User> findById(Long id);
    List<User> findAll();
    boolean existsByEmail(String email);
+   Optional<User> findByEmail(String email);
 }

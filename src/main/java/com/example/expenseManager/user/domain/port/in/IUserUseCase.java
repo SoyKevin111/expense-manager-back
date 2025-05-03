@@ -10,5 +10,6 @@ public interface IUserUseCase {
    void delete(Long id);
    Optional<User> findById(Long id);
    List<User> findAll();
-    User updateProfile(User user);
+   User updateProfile(User user);
+   User findByEmail(String email);
 }

@@ -1,6 +1,7 @@
 package com.example.expenseManager.user.application;
 
 import com.example.expenseManager.core.application.exceptions.models.ServerInternalError;
+import com.example.expenseManager.user.domain.RoleEnum;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.in.IUserUseCase;
 import com.example.expenseManager.user.domain.port.out.IUserRepository;
@@ -29,6 +30,9 @@ public class UserUseCase implements IUserUseCase {
       }
 
       try {
+         if (user.getRole() == null) {
+            user.setRole(RoleEnum.USER);
+         }
          return userRepository.save(user);
       } catch (Exception e) {
          log.error(e.getMessage());
@@ -76,6 +80,17 @@ public class UserUseCase implements IUserUseCase {
       } catch (Exception e) {
          log.error(e.getMessage());
          throw new ServerInternalError("Error updating user profile");
+      }
+   }
+
+   @Override
+   public User findByEmail(String email) {
+      try {
+         return this.userRepository.findByEmail(email)
+            .orElseThrow(() -> new ServerInternalError("User not found"));
+      } catch (Exception e) {
+         log.error(e.getMessage());
+         throw new ServerInternalError("Error finding user by email");
       }
    }
 

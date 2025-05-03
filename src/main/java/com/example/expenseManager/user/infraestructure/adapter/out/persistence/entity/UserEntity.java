@@ -1,11 +1,10 @@
 package com.example.expenseManager.user.infraestructure.adapter.out.persistence.entity;
 
+import com.example.expenseManager.user.domain.RoleEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "\"user\"")
@@ -31,7 +30,7 @@ public class UserEntity {
    @NotBlank(message = "password not null or empty")
    String password;
 
-   @ManyToOne(cascade = CascadeType.REFRESH)
-   @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
-   RoleEntity role;
+   @Column(name = "role_name")
+   @Enumerated(EnumType.STRING)
+   RoleEnum role;
 }

@@ -1,8 +1,10 @@
-package com.example.expenseManager.user.infraestructure.adapter.out.persistence;
+package com.example.expenseManager.user.infraestructure.adapter.out.persistence.entity;
 
+import com.example.expenseManager.user.domain.RoleEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
 
 @Entity
 @Table(name = "\"user\"")
@@ -17,12 +19,18 @@ public class UserEntity {
    Long id;
 
    @Column(nullable = true)
-   String name;
-
-   @Column(nullable = true, unique = true)
-   String identification;
+   @NotBlank(message = "username not null or empty")
+   String username;
 
    @Column(nullable = true, unique = true)
    @NotBlank(message = "Not null or empty")
    String email;
+
+   @Column(nullable = true, unique = true)
+   @NotBlank(message = "password not null or empty")
+   String password;
+
+   @Column(name = "role_name")
+   @Enumerated(EnumType.STRING)
+   RoleEnum role;
 }

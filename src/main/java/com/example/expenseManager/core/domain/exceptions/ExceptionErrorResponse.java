@@ -15,5 +15,16 @@ public class ExceptionErrorResponse {
    private LocalDateTime timestamp;
    private int status;
    private String error;
+   private String message;
    private List<FieldErrorDTO> errors;
+
+   public ExceptionErrorResponse(
+      LocalDateTime timestamp,
+      int status,
+      String error
+   ) {
+      this.timestamp = timestamp;
+      this.status = status;
+      this.error = error;
+   }
 }

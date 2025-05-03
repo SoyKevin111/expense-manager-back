@@ -1,7 +1,7 @@
 package com.example.expenseManager.personalFinance.infraestructure.adapter.out.persistence.entities;
 
 import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
-import com.example.expenseManager.user.infraestructure.adapter.out.persistence.UserEntity;
+import com.example.expenseManager.user.infraestructure.adapter.out.persistence.entity.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

@@ -1,20 +1,51 @@
 package com.example.expenseManager.user.application.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.example.expenseManager.user.domain.RoleEnum;
 import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class UpdateUserRequest {
-
-   @Size(min = 5, max = 40, message = "Name must be between 3and 50 characters")
-   String name;
-
-   @NotBlank(message = "Email cannot be blank")
+   String username;
    String email;
+   String password;
+   RoleEnum role;
+
+   public boolean isValidUsername() {
+      if (username == null || username.isBlank()) {
+         throw new IllegalArgumentException("The username cannot be empty");
+      }
+      return true;
+   }
+
+   public boolean isValidEmail() {
+      if (email == null || email.isBlank()) {
+         throw new IllegalArgumentException("The email cannot be empty");
+      }
+      if (!email.endsWith("@gmail.com")) {
+         throw new IllegalArgumentException("The email must be a @gmail.com address");
+      }
+      return true;
+   }
+
+   public boolean isValidPassword() {
+      if (password == null || password.isBlank()) {
+         throw new IllegalArgumentException("The password cannot be empty");
+      }
+      if (password.length() < 8 || password.length() > 20) {
+         throw new IllegalArgumentException("The password must be between 8 and 20 characters");
+      }
+      return true;
+   }
+
+   public boolean isValidRole() {
+      if (role == null) {
+         throw new IllegalArgumentException("The role cannot be null");
+      }
+      return true;
+   }
+
+
 }

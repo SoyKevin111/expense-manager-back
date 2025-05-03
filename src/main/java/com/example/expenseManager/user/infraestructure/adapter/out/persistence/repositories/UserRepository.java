@@ -1,8 +1,9 @@
-package com.example.expenseManager.user.infraestructure.adapter.out.persistence;
+package com.example.expenseManager.user.infraestructure.adapter.out.persistence.repositories;
 
 import com.example.expenseManager.core.application.mappers.EntityGeneralMapper;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.out.IUserRepository;
+import com.example.expenseManager.user.infraestructure.adapter.out.persistence.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +48,10 @@ public class UserRepository implements IUserRepository {
    }
 
    @Override
-   public boolean existsByIdentification(String identification) {
-      return this.userRepository.existsByIdentification(identification);
+   public Optional<User> findByEmail(String email) {
+      return this.userRepository.findByEmail(email).map(
+         userEntity -> this.mapper.toDomain(userEntity, User.class)
+      );
    }
+
 }

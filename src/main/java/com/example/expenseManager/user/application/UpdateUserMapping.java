@@ -14,13 +14,19 @@ public class UpdateUserMapping {
    IUserRepository userRepository;
 
    public User toDomainModel(UpdateUserRequest updateUserRequest, Long userId) {
-      User user = userRepository.findById(userId)
-         .orElseThrow(() -> new ServerInternalError("User not found"));
-      if (!(updateUserRequest.getName() == null || updateUserRequest.getName().isEmpty())) {
-         user.setName(updateUserRequest.getName());
+      User user = userRepository.findById(userId).orElseThrow(() -> new ServerInternalError("User not found"));
+
+      if (updateUserRequest.isValidUsername()) {
+         user.setUsername(updateUserRequest.getUsername());
       }
-      if (!(updateUserRequest.getEmail() == null || updateUserRequest.getEmail().isEmpty())) {
+      if (updateUserRequest.isValidEmail()) {
          user.setEmail(updateUserRequest.getEmail());
+      }
+      if (updateUserRequest.isValidPassword()) {
+         user.setPassword(updateUserRequest.getPassword());
+      }
+      if (updateUserRequest.isValidRole()) {
+         user.setRole(updateUserRequest.getRole());
       }
       return user;
    }

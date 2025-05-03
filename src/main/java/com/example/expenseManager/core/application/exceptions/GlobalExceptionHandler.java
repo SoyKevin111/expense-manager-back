@@ -2,6 +2,7 @@ package com.example.expenseManager.core.application.exceptions;
 
 import com.example.expenseManager.core.application.exceptions.models.ConflictValidationException;
 import com.example.expenseManager.core.application.exceptions.models.ServerInternalError;
+import com.example.expenseManager.core.application.exceptions.models.UnauthorizedAccessException;
 import com.example.expenseManager.core.domain.exceptions.ExceptionErrorResponse;
 import com.example.expenseManager.core.domain.exceptions.dto.FieldErrorDTO;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -41,48 +41,69 @@ public class GlobalExceptionHandler {
          .body(response);
    }
 
+
    //Validaciones personalizadas de conflictos en la base de datos
    @ExceptionHandler(ConflictValidationException.class)
-   public ResponseEntity<Map<String, Object>> handleConflict(
+   public ResponseEntity<ExceptionErrorResponse> handleConflict(
       ConflictValidationException ex
    ) {
-      Map<String, Object> response = Map.of(
-         "timestamp", LocalDateTime.now(),
-         "status", HttpStatus.CONFLICT.value(),
-         "error", "[Conflict Error]",
-         "message", ex.getMessage()
-      );
+      ExceptionErrorResponse response = ExceptionErrorResponse.builder()
+         .timestamp(LocalDateTime.now())
+         .status(HttpStatus.CONFLICT.value())
+         .error("[Conflict Error]")
+         .message(ex.getMessage())
+         .build();
+
       return ResponseEntity
          .status(HttpStatus.CONFLICT)
          .body(response);
    }
 
+   //Validaciones de acceso no autorizado
+   @ExceptionHandler(UnauthorizedAccessException.class)
+   public ResponseEntity<ExceptionErrorResponse> handleUnauthorized(
+      UnauthorizedAccessException ex
+   ) {
+      ExceptionErrorResponse response = ExceptionErrorResponse.builder()
+         .timestamp(LocalDateTime.now())
+         .status(HttpStatus.UNAUTHORIZED.value())
+         .error("[Unauthorized Error]")
+         .message(ex.getMessage())
+         .build();
+
+      return ResponseEntity
+         .status(HttpStatus.UNAUTHORIZED)
+         .body(response);
+   }
+
    //Validaciones Genericas
    @ExceptionHandler(ServerInternalError.class)
-   public ResponseEntity<Map<String, Object>> handleGeneric(ServerInternalError ex) {
-      Map<String, Object> response = Map.of(
-         "timestamp", LocalDateTime.now(),
-         "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-         "error", "[Server Internal Error]",
-         "message", ex.getMessage().isEmpty() ? "Server Internal Error" : ex.getMessage()
-      );
+   public ResponseEntity<ExceptionErrorResponse> handleGeneric(ServerInternalError ex) {
+      ExceptionErrorResponse response = ExceptionErrorResponse.builder()
+         .timestamp(LocalDateTime.now())
+         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+         .error(ex.getError().isEmpty() ? "[Server Internal Error]" : ex.getError())
+         .message(ex.getMessage().isEmpty() ? "Server Internal Error" : ex.getMessage())
+         .build();
+
       return ResponseEntity
          .status(HttpStatus.INTERNAL_SERVER_ERROR)
          .body(response);
    }
 
+
    //Validacion de Enum
    @ExceptionHandler(HttpMessageNotReadableException.class)
-   public ResponseEntity<Map<String, Object>> handleInvalidEnum(HttpMessageNotReadableException ex) {
-      if (ex.getCause() instanceof InvalidFormatException) {
-         InvalidFormatException ife = (InvalidFormatException) ex.getCause();
+   public ResponseEntity<ExceptionErrorResponse> handleInvalidEnum(HttpMessageNotReadableException ex) {
+      if (ex.getCause() instanceof InvalidFormatException ife) {
          if (ife.getTargetType().isEnum()) {
-            Map<String, Object> response = Map.of(
-               "timestamp", LocalDateTime.now(),
-               "status", HttpStatus.BAD_REQUEST.value(),
-               "error", "[Transaction Type]",
-               "message", "Tipo de transacción no válida: " + ife.getValue()
-            );
+            ExceptionErrorResponse response = ExceptionErrorResponse.builder()
+               .timestamp(LocalDateTime.now())
+               .status(HttpStatus.BAD_REQUEST.value())
+               .error("[Enum Type]")
+               .message("Tipo de Enum no válido: " + ife.getValue())
+               .build();
+
             return ResponseEntity
                .status(HttpStatus.BAD_REQUEST)
                .body(response);
@@ -90,7 +111,6 @@ public class GlobalExceptionHandler {
       }
       return null;
    }
-
 }
 
 
@@ -101,7 +121,7 @@ public class GlobalExceptionHandler {
   "error": "[Request Error]",
   "errors": [
     {
-      "field": "name",
+      "field": "username",
       "message": "Name is required"
     },
     {

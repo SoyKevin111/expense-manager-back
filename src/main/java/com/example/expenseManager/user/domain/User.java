@@ -2,6 +2,7 @@ package com.example.expenseManager.user.domain;
 
 import lombok.*;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -9,7 +10,8 @@ import lombok.*;
 @Builder
 public class User {
    Long id;
-   String name;
-   String identification;
+   String username;
    String email;
+   String password;
+   RoleEnum role;
 }

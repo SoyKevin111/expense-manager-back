@@ -78,13 +78,50 @@ Este endpoint devuelve un resumen del mes con los totales de **ingresos**, **gas
     ```
 
 
-### Avances ⏭️
+## 🚀 Avances
 
-| ![api5](./src/main/resources/assets/avances/image-6.png) | ![api5](./src/main/resources/assets/avances/image-7.png)   |
-|----------------------------------------------------------|------------------------------------------------------------|
-| ![api5](./src/main/resources/assets/avances/image-8.png) | ![api5](./src/main/resources/assets/avances/image-999.png) |
+### 🔐 Autenticación
 
-![api5](./src/main/resources/assets/avances/image-10.png)
-![api5](./src/main/resources/assets/avances/image-11.png)
+#### 📝 Registro de Usuario
+![Registro](./src/main/resources/assets/avances/image-13.png)
+
+#### 🔑 Inicio de Sesión
+![Login](./src/main/resources/assets/avances/image-14.png)
+
+#### 🔒 Acceso a Recursos Protegidos
+![Recursos protegidos](./src/main/resources/assets/avances/image-17.png)
+
+#### ⛔ Crear Usuario con Rol No Autorizado
+> Solo un administrador puede asignar roles diferentes de `USER`.
+![Error al crear usuario](./src/main/resources/assets/avances/image-18.png)
+
+#### ✅ Crear Usuario con Rol de ADMIN
+![Usuario ADMIN creado](./src/main/resources/assets/avances/image-19.png)
+
+---
+
+### 📡 Endpoints API
+
+<div align="center">
+
+<table>
+  <tr>
+    <td><img src="./src/main/resources/assets/avances/image-6.png" width="300"/></td>
+    <td><img src="./src/main/resources/assets/avances/image-7.png" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="./src/main/resources/assets/avances/image-8.png" width="300"/></td>
+    <td><img src="./src/main/resources/assets/avances/image-999.png" width="300"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="./src/main/resources/assets/avances/image-10.png" width="600"/><br/>
+      <img src="./src/main/resources/assets/avances/image-11.png" width="600"/>
+    </td>
+  </tr>
+</table>
+
+</div>
+
 
 #### ver mas resultados en: ``src/main/resources/assets/avances``

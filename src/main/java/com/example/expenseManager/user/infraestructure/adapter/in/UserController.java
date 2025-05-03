@@ -1,8 +1,10 @@
 package com.example.expenseManager.user.infraestructure.adapter.in;
 
 import com.example.expenseManager.core.application.mappers.RequestGeneralMapper;
+import com.example.expenseManager.user.application.UpdateProfileMapping;
 import com.example.expenseManager.user.application.UpdateUserMapping;
 import com.example.expenseManager.user.application.dto.request.CreateUserRequest;
+import com.example.expenseManager.user.application.dto.request.UpdateProfileRequest;
 import com.example.expenseManager.user.application.dto.request.UpdateUserRequest;
 import com.example.expenseManager.user.domain.User;
 import com.example.expenseManager.user.domain.port.in.IUserUseCase;
@@ -21,36 +23,42 @@ public class UserController {
    private RequestGeneralMapper requestMapper;
    @Autowired
    private UpdateUserMapping updateUserMapping;
+   @Autowired
+   private UpdateProfileMapping updateProfileMapping;
 
    @PostMapping("/users")
    public ResponseEntity<?> create(@RequestBody @Valid CreateUserRequest createUserRequest) {
-      User user = this.requestMapper.toDomain(createUserRequest, User.class);
+      User user = this.requestMapper.toDomain(createUserRequest, User.class); //valida y mapea datos.
       User userResponse = this.userUseCase.save(user);
       return ResponseEntity.ok().body(userResponse);
    }
 
-   @PutMapping("/users/{id}") //free name, email
-   public ResponseEntity<?> update(@RequestBody @Valid UpdateUserRequest updateUserRequest, @PathVariable Long id) {
+   @PutMapping("/users/{id}") //rol: admin
+   public ResponseEntity<?> update(@RequestBody UpdateUserRequest updateUserRequest, @PathVariable Long id) {
       User user = this.updateUserMapping.toDomainModel(updateUserRequest, id);
       User userResponse = this.userUseCase.save(user); //with id
       return ResponseEntity.ok().body(userResponse);
    }
 
-   @DeleteMapping("/users/{id}")
+   @DeleteMapping("/users/{id}") //rol: admin
    public ResponseEntity<?> delete(@PathVariable Long id) {
       this.userUseCase.delete(id);
       return ResponseEntity.ok().build();
    }
 
-   @GetMapping("/users/{id}")
+   @GetMapping("/users/{id}") //rol: admin
    public ResponseEntity<?> findById(@PathVariable Long id) {
       return ResponseEntity.ok().body(this.userUseCase.findById(id));
    }
 
-   @GetMapping("/users")
+   @GetMapping("/users") //rol: admin
    public ResponseEntity<?> findAll() {
       return ResponseEntity.ok().body(this.userUseCase.findAll());
    }
 
-
+   @PatchMapping("/users/profile/{id}") //rol: user, admin
+   public ResponseEntity<?> update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, @PathVariable Long id) {
+      User userResponse = this.updateProfileMapping.toDomainModel(updateProfileRequest, id);
+      return ResponseEntity.ok().body(this.userUseCase.updateProfile(userResponse));
+   }
 }

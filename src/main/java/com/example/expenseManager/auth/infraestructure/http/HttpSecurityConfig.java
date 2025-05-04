@@ -1,4 +1,4 @@
-package com.example.expenseManager.auth.infraestructure.config;
+package com.example.expenseManager.auth.infraestructure.http;
 
 import com.example.expenseManager.auth.application.service.UserAuthService;
 import com.example.expenseManager.auth.infraestructure.util.JwtUtils;
@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -50,18 +51,23 @@ public class HttpSecurityConfig {
       return this.authenticationConfiguration.getAuthenticationManager();
    }
 
+   private HttpSecurity applyCommonConfig(HttpSecurity http) throws Exception {
+      return http
+         .csrf(AbstractHttpConfigurer::disable)
+         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+         .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), BasicAuthenticationFilter.class);
+   }
+
    @Bean
    @Order(1)
-   public SecurityFilterChain authSecurity(HttpSecurity httpSecurity) throws Exception {
-      return httpSecurity
+   public SecurityFilterChain authSecurity(HttpSecurity http) throws Exception {
+      applyCommonConfig(http);
+      return http
          .securityMatcher("/manager/auth/**") // endpoints que comiencen con manager/auth/
-         .csrf(csrf -> csrf.disable())
-         .httpBasic(Customizer.withDefaults())
-         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-         .authorizeHttpRequests(http -> {
+         .authorizeHttpRequests(auth -> {
             //Publicos
-            http.requestMatchers(HttpMethod.POST, "/manager/auth/sign-up", "/manager/auth/log-in").permitAll();
-            http.anyRequest().authenticated();//denegamos el acceso a cualquier otro endpoint
+            auth.requestMatchers(HttpMethod.POST, "/manager/auth/sign-up", "/manager/auth/log-in").permitAll();
+            auth.anyRequest().denyAll();//denegamos el acceso a cualquier otro endpoint
          })
          .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), BasicAuthenticationFilter.class)
          .build();
@@ -69,21 +75,20 @@ public class HttpSecurityConfig {
 
    @Bean
    @Order(2)
-   public SecurityFilterChain userSecurity(HttpSecurity httpSecurity) throws Exception {
-      return httpSecurity
+   public SecurityFilterChain usersSecurity(HttpSecurity http) throws Exception {
+      applyCommonConfig(http);
+      return http
          .securityMatcher("/manager/request/users/**") // endpoints que comiencen con manager/request/users/
-         .csrf(csrf -> csrf.disable())
-         .httpBasic(Customizer.withDefaults())
-         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-         .authorizeHttpRequests(http -> {
-            //Publicos
-            http.requestMatchers(HttpMethod.GET, "/manager/request/users/*").permitAll();
-            //Privados
-            http.requestMatchers(HttpMethod.GET, "/manager/request/users").hasRole("USER");
-            http.requestMatchers(HttpMethod.POST, "/manager/request/users").hasRole("ADMIN");
-            http.requestMatchers(HttpMethod.PUT, "/manager/request/users").hasRole("ADMIN");
-            http.requestMatchers(HttpMethod.DELETE, "/manager/request/users").hasRole("ADMIN");
-            http.anyRequest().authenticated();//denegamos el acceso a cualquier otro endpoint
+         .authorizeHttpRequests(auth -> {
+            //USER
+            auth.requestMatchers(HttpMethod.GET, "/manager/request/users/*").hasAnyRole("USER", "ADMIN"); //get user by id
+            auth.requestMatchers(HttpMethod.PUT, "/manager/request/users/profile/*").hasAnyRole("USER", "ADMIN"); //actualizar perfil
+            //ADMIN
+            auth.requestMatchers(HttpMethod.GET, "/manager/request/users").hasRole("ADMIN");
+            auth.requestMatchers(HttpMethod.POST, "/manager/request/users").hasRole("ADMIN");
+            auth.requestMatchers(HttpMethod.PUT, "/manager/request/users").hasRole("ADMIN");
+            auth.requestMatchers(HttpMethod.DELETE, "/manager/request/users").hasRole("ADMIN");
+            auth.anyRequest().denyAll();//denegamos el acceso a cualquier otro endpoint
          })
          .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), BasicAuthenticationFilter.class)
          .build();

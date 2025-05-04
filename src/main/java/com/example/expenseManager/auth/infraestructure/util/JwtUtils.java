@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.example.expenseManager.core.application.exceptions.models.UnauthorizedAccessException;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,16 +65,14 @@ public class JwtUtils {
 
    //validacion del token al acceder a algun recurso
    public DecodedJWT validateToken(String token) {
-      try {
+
          System.out.println("validando el token: " + token);
          Algorithm algorithm = Algorithm.HMAC256(this.jwtSecretKey);
          JWTVerifier verifier = JWT.require(algorithm)
             .withIssuer(this.jwtUser)
             .build();
          return verifier.verify(token); //DecodeJWT
-      } catch (JWTVerificationException ex) {
-         throw new JWTVerificationException("Token invalid, no autorizado.");
-      }
+
 
    }
 

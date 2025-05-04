@@ -76,20 +76,23 @@ public class GlobalExceptionHandler {
          .body(response);
    }
 
-   //Validaciones Genericas
    @ExceptionHandler(ServerInternalError.class)
    public ResponseEntity<ExceptionErrorResponse> handleGeneric(ServerInternalError ex) {
+      String error = ex.getError();
+      String message = ex.getMessage();
+
       ExceptionErrorResponse response = ExceptionErrorResponse.builder()
          .timestamp(LocalDateTime.now())
          .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-         .error(ex.getError().isEmpty() ? "[Server Internal Error]" : ex.getError())
-         .message(ex.getMessage().isEmpty() ? "Server Internal Error" : ex.getMessage())
+         .error((error == null || error.isEmpty()) ? "[Server Internal Error]" : error)
+         .message((message == null || message.isEmpty()) ? "Server Internal Error" : message)
          .build();
 
       return ResponseEntity
          .status(HttpStatus.INTERNAL_SERVER_ERROR)
          .body(response);
    }
+
 
 
    //Validacion de Enum

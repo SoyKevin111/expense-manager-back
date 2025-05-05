@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Transaction {
    Long id;
    BigDecimal amount;
-   LocalDate createdAt;
+   LocalDate createdDate;
    TypeTransaction typeTransaction;
    User user;
    Category category;

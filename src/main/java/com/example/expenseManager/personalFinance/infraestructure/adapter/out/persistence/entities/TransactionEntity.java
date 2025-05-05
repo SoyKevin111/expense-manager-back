@@ -24,9 +24,9 @@ public class TransactionEntity {
    @NotNull(message = "Amount cannot be null")
    BigDecimal amount;
 
-   @Column(name = "created_at")
-   @NotNull(message = "createdAt cannot be null")
-   LocalDate createdAt;
+   @Column(name = "created_date")
+   @NotNull(message = "createdDate cannot be null")
+   LocalDate createdDate;
 
    @Enumerated(EnumType.STRING)
    @Column(name = "type_transaction")

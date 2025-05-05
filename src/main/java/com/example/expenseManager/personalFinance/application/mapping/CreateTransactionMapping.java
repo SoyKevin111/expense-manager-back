@@ -30,7 +30,7 @@ public class CreateTransactionMapping {
       transaction.setCategory(category);
       transaction.setTypeTransaction(createTransactionRequest.getTypeTransaction());
       transaction.setAmount(createTransactionRequest.getAmount());
-      transaction.setCreatedAt(LocalDate.now());
+      transaction.setCreatedDate(LocalDate.now());
 
       return transaction;
    }

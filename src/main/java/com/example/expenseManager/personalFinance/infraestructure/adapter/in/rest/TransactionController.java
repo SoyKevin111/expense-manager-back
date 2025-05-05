@@ -36,7 +36,8 @@ public class TransactionController {
          TransactionLoadResponse.builder()
             .id(transaction.getId())
             .amount(transaction.getAmount())
-            .createdDate(transaction.getCreatedDate())
+            .time(String.valueOf(transaction.getCreatedDateTime().toLocalTime()))
+            .date(String.valueOf(transaction.getCreatedDateTime().toLocalDate()))
             .typeTransaction(transaction.getTypeTransaction())
             .userId(transaction.getUser().getId())
             .category(transaction.getCategory())
@@ -49,23 +50,27 @@ public class TransactionController {
       return ResponseEntity.ok(monthlySummaryHandler.typeHandle(monthlySummaryRequest));
    }
 
-   //http://localhost:8080/manager/request/transactions/page?page=0&size=5&sortBy=createdDate
+   //http://localhost:8080/manager/request/transactions/page?page=0&size=5&sortBy=createdDateTime&sortDirection=desc
    @GetMapping("transactions/page")
    public ResponseEntity<?> findAllPage(
       @Min(0) @RequestParam(defaultValue = "0") int page,
       @Min(1) @RequestParam(defaultValue = "5") int size,
-      @RequestParam(defaultValue = "id") String sortBy
+      @RequestParam(defaultValue = "id") String sortBy,
+      @RequestParam(defaultValue = "asc") String sortDirection
    ) {
-      Page<TransactionLoadResponse> transactionPageable = this.transactionUseCase.findAllPage(PageRequest.of(page, size, Sort.by(sortBy))).map(
-         transaction -> TransactionLoadResponse.builder()
-            .typeTransaction(transaction.getTypeTransaction())
-            .amount(transaction.getAmount())
-            .createdDate(transaction.getCreatedDate())
-            .userId(transaction.getUser().getId())
-            .category(transaction.getCategory())
-            .id(transaction.getId())
-            .build()
-      );
+      Sort sort = Sort.by(Sort.Order.by(sortBy).with(Sort.Direction.fromString(sortDirection)));
+      Page<TransactionLoadResponse> transactionPageable = this.transactionUseCase.findAllPage(PageRequest.of(page, size, sort))
+         .map(
+            transaction -> TransactionLoadResponse.builder()
+               .typeTransaction(transaction.getTypeTransaction())
+               .amount(transaction.getAmount())
+               .time(String.valueOf(transaction.getCreatedDateTime().toLocalTime()))
+               .date(String.valueOf(transaction.getCreatedDateTime().toLocalDate()))
+               .userId(transaction.getUser().getId())
+               .category(transaction.getCategory())
+               .id(transaction.getId())
+               .build()
+         );
       return ResponseEntity.ok(transactionPageable);
    }
 }

@@ -5,7 +5,7 @@ import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,7 +15,8 @@ import java.time.LocalDate;
 public class TransactionLoadResponse {
    Long id;
    BigDecimal amount;
-   LocalDate createdDate;
+   String time;
+   String date;
    TypeTransaction typeTransaction;
    Long userId;
    Category category;

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class CreateTransactionMapping {
@@ -30,7 +31,7 @@ public class CreateTransactionMapping {
       transaction.setCategory(category);
       transaction.setTypeTransaction(createTransactionRequest.getTypeTransaction());
       transaction.setAmount(createTransactionRequest.getAmount());
-      transaction.setCreatedDate(LocalDate.now());
+      transaction.setCreatedDateTime(LocalDateTime.now());
 
       return transaction;
    }

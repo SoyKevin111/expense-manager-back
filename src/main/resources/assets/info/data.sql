@@ -4,14 +4,10 @@ INSERT INTO roles (role_name) VALUES
 ('USER');
 
 -- Usuarios
-INSERT INTO "user" (username, email, password, role_id) VALUES
-('Alice', 'alice@example.com', 'ID001', 1),
-('Bob', 'bob@example.com', 'ID002', 2),
-('Charlie', 'charlie@example.com', 'ID003', 2),
-('Diana', 'diana@example.com', 'ID004', 2),
-('Ethan', 'ethan@example.com', 'ID005',2);
-
-
+INSERT INTO "user" (username, email, password,role_name) VALUES
+('Alice', 'alice@gmail.com', '$2a$10$2eHF8siZ/4HN9rIYOquGje9jwwQjBNkBjOHKRQC1sJhr5XOKDA/ES', 'ADMIN'),
+('Bob', 'bob@gmail.com', '$2a$10$Tq1/xXIIgo/HqAwuA.LdmOOnGTJ8l.5WNmTWflzu3JgYycF1Nvzp2', 'USER'),
+('Charlie', 'charlie@gmail.com', '$2a$10$0qu1z/OKDz64Eh87aAK2CO91efg.ZVBVAVb8Myube0ikD60Q58bMy', 'USER')
 --Categorías
 INSERT INTO category (name, description) VALUES
 ('Food', 'Expenses on food and groceries'),

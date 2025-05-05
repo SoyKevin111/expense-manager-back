@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       String json = "{"
          + "\"timestamp\": \"" + LocalDateTime.now() + "\","
          + "\"status\": " + HttpServletResponse.SC_UNAUTHORIZED + ","
-         + "\"error\": \"[Unauthorized Error]\","
+         + "\"error\": \"[Unauthorized Error xd]\","
          + "\"message\": \"" + message + "\""
          + "}";
 

@@ -15,4 +15,7 @@ public interface ITransactionUseCase {
     List<Transaction> findAll();
     BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes); //ingreso, gasto, entrada de ahorro o salida de ahorro.
     Page<Transaction> findAllPage(Pageable pageable);
+    BigDecimal findAmountByType(TypeTransaction typeTransaction, String email);
+    BigDecimal findCurrentBalance(String email); //INCOME
+    BigDecimal findCurrentSavings(String email);
 }

@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PaginationRequest {
+public class TransactionPage {
 
    @NotNull(message = "Page number cannot be null")
    int page;

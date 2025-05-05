@@ -5,11 +5,10 @@ import com.example.expenseManager.personalFinance.domain.models.Transaction;
 import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
 import com.example.expenseManager.personalFinance.domain.port.in.usecases.ITransactionUseCase;
 import com.example.expenseManager.personalFinance.domain.port.out.repositories.ITransactionRepository;
+import com.example.expenseManager.user.domain.port.out.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -71,4 +70,40 @@ public class TransactionUseCase implements ITransactionUseCase {
          throw new ServerInternalError("Error finding all transactions with pagination");
       }
    }
+
+   @Override
+   public BigDecimal findAmountByType(TypeTransaction typeTransaction, String email) {
+      try {
+         return transactionRepository.summaryAmountByType(typeTransaction, email);
+      } catch (Exception e) {
+         throw new ServerInternalError("Error finding amount by type: " + typeTransaction);
+      }
+   }
+
+
+   @Override
+   public BigDecimal findCurrentBalance(String email) { //Total Saldo disponible
+      try {
+         return inputSubtractOutput(email, TypeTransaction.INCOME, TypeTransaction.EXPENSE);
+      } catch (Exception e) {
+         throw new ServerInternalError("Error finding current balance");
+      }
+   }
+
+   @Override
+   public BigDecimal findCurrentSavings(String email) { //Total Ahorros disponibles
+      try {
+         return inputSubtractOutput(email, TypeTransaction.SAVINGS_IN, TypeTransaction.SAVINGS_OUT);
+      } catch (Exception e) {
+         throw new ServerInternalError("Error finding current savings");
+      }
+   }
+
+   public BigDecimal inputSubtractOutput(String email, TypeTransaction typeIn, TypeTransaction typeOut) {
+      BigDecimal in = this.transactionRepository.summaryAmountByType(typeIn, email);
+      BigDecimal out = this.transactionRepository.summaryAmountByType(typeOut, email);
+      return (in != null ? in : BigDecimal.ZERO)
+         .subtract(out != null ? out : BigDecimal.ZERO);
+   }
+
 }

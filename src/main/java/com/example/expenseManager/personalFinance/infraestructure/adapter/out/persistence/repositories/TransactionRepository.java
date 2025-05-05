@@ -64,6 +64,11 @@ public class TransactionRepository implements ITransactionRepository {
    }
 
    @Override
+   public BigDecimal summaryAmountByType(TypeTransaction typeTransaction, String email) {
+      return this.transactionRepository.summaryAmountByType(typeTransaction, email);
+   }
+
+   @Override
    public Page<Transaction> findAllPage(Pageable pageable) {
       return this.transactionRepository.findAll(pageable)
          .map(transactionEntity -> this.entityGeneralMapper.toDomain(transactionEntity, Transaction.class));

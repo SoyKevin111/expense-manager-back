@@ -2,20 +2,25 @@ package com.example.expenseManager.personalFinance.infraestructure.adapter.in.re
 
 import com.example.expenseManager.personalFinance.application.dto.request.CreateTransactionRequest;
 import com.example.expenseManager.personalFinance.application.dto.request.MonthlySummaryRequest;
-import com.example.expenseManager.personalFinance.application.dto.request.PaginationRequest;
+import com.example.expenseManager.personalFinance.application.dto.request.TransactionPage;
 import com.example.expenseManager.personalFinance.application.dto.response.TransactionLoadResponse;
 import com.example.expenseManager.personalFinance.application.handler.GetMonthlySummaryHandler;
 import com.example.expenseManager.personalFinance.application.mapping.CreateTransactionMapping;
 import com.example.expenseManager.personalFinance.domain.models.Transaction;
+import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
 import com.example.expenseManager.personalFinance.domain.port.in.usecases.ITransactionUseCase;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -46,25 +51,15 @@ public class TransactionController {
       );
    }
 
-   @GetMapping("transactions/incomes")
-   public ResponseEntity<?> findAllIncomes() {
-      return null;
+   @GetMapping("transactions/balance-and-savings")
+   public ResponseEntity<?> findBalanceAndSavings(Authentication authentication) {
+      Map<String, BigDecimal> responseSavingsBalance = Map.of(
+         "balance", this.transactionUseCase.findCurrentBalance(authentication.getName()),
+         "savings", this.transactionUseCase.findCurrentSavings(authentication.getName())
+      );
+      return ResponseEntity.ok(responseSavingsBalance);
    }
 
-   @GetMapping("transactions/expenses")
-   public ResponseEntity<?> findAllExpenses() {
-      return null;
-   }
-
-   @GetMapping("transactions/savingsIn")
-   public ResponseEntity<?> findAllSavingsIn() {
-      return null;
-   }
-
-   @GetMapping("transactions/savingsOut")
-   public ResponseEntity<?> findAllSavingsOut() {
-      return null;
-   }
 
    @PostMapping("/transactions/monthly")
    public ResponseEntity<?> summaryForTypeAndMonthly(@RequestBody @Valid MonthlySummaryRequest monthlySummaryRequest) {
@@ -73,9 +68,9 @@ public class TransactionController {
 
    //http://localhost:8080/manager/request/transactions/page
    @GetMapping("transactions/page")
-   public ResponseEntity<?> findAllPage(@RequestBody @Valid PaginationRequest paginationRequest) {
-      Sort sort = Sort.by(Sort.Order.by(paginationRequest.getSortBy()).with(Sort.Direction.fromString(paginationRequest.getSortDirection())));
-      Page<TransactionLoadResponse> transactionPageable = this.transactionUseCase.findAllPage(PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize(), sort))
+   public ResponseEntity<?> findAllPage(@RequestBody @Valid TransactionPage transactionPage) {
+      Sort sort = Sort.by(Sort.Order.by(transactionPage.getSortBy()).with(Sort.Direction.fromString(transactionPage.getSortDirection())));
+      Page<TransactionLoadResponse> transactionPageable = this.transactionUseCase.findAllPage(PageRequest.of(transactionPage.getPage(), transactionPage.getSize(), sort))
          .map(
             transaction -> TransactionLoadResponse.builder()
                .typeTransaction(transaction.getTypeTransaction())
@@ -102,11 +97,12 @@ A hacer:
 
  por hacer:
    obtener todas las transacciones por tipo
-   findAllIncomes()
-   findAllExpenses()
-   findAllSavingsIn()
-   findAllSavingsOut()
+   BigDecimal findAllIncomes()
+   BigDecimal findAllExpenses()
+   BigDecimal findAllSavingsIn()
+   BigDecimal findAllSavingsOut()
 
+   BigDecimal findAmounthBytype(TypeTransaction typeTransaction); //INCOME
 
 
     Logica de entrada, salida, ahorro, salidaAhorro:

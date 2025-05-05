@@ -22,6 +22,11 @@ public interface TransactionRepositoryPostgresql extends JpaRepository<Transacti
       "AND EXTRACT(MONTH FROM t.createdDateTime) = :mes")
    BigDecimal summaryForTypeAndMonthly(@Param("typeTransaction") TypeTransaction typeTransaction, @Param("userId") Long userId, @Param("mes") int mes);
 
+   @Query("SELECT SUM(t.amount) FROM TransactionEntity t " +
+      "WHERE t.typeTransaction = :typeTransaction " +
+      "AND t.user.email = :email")
+   BigDecimal summaryAmountByType(@Param("typeTransaction") TypeTransaction typeTransaction, @Param("email") String email);
+
 }
 
 

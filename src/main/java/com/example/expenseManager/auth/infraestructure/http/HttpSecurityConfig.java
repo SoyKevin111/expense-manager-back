@@ -94,4 +94,17 @@ public class HttpSecurityConfig {
          .build();
    }
 
+   @Bean
+   @Order(3)
+   public SecurityFilterChain transactionsSecurity(HttpSecurity http) throws Exception {
+      applyCommonConfig(http);
+      return http
+         .securityMatcher("/manager/request/transactions/**")
+         .authorizeHttpRequests(auth ->
+            auth.requestMatchers("/transactions/**").authenticated().anyRequest().permitAll()
+         )
+         .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), BasicAuthenticationFilter.class)
+         .build();
+   }
+
 }

@@ -2,6 +2,7 @@ package com.example.expenseManager.personalFinance.infraestructure.adapter.in.re
 
 import com.example.expenseManager.personalFinance.application.dto.request.CreateTransactionRequest;
 import com.example.expenseManager.personalFinance.application.dto.request.MonthlySummaryRequest;
+import com.example.expenseManager.personalFinance.application.dto.request.PaginationRequest;
 import com.example.expenseManager.personalFinance.application.dto.response.TransactionLoadResponse;
 import com.example.expenseManager.personalFinance.application.handler.GetMonthlySummaryHandler;
 import com.example.expenseManager.personalFinance.application.mapping.CreateTransactionMapping;
@@ -45,21 +46,36 @@ public class TransactionController {
       );
    }
 
-   @GetMapping("/transactions/monthly")
+   @GetMapping("transactions/incomes")
+   public ResponseEntity<?> findAllIncomes() {
+      return null;
+   }
+
+   @GetMapping("transactions/expenses")
+   public ResponseEntity<?> findAllExpenses() {
+      return null;
+   }
+
+   @GetMapping("transactions/savingsIn")
+   public ResponseEntity<?> findAllSavingsIn() {
+      return null;
+   }
+
+   @GetMapping("transactions/savingsOut")
+   public ResponseEntity<?> findAllSavingsOut() {
+      return null;
+   }
+
+   @PostMapping("/transactions/monthly")
    public ResponseEntity<?> summaryForTypeAndMonthly(@RequestBody @Valid MonthlySummaryRequest monthlySummaryRequest) {
       return ResponseEntity.ok(monthlySummaryHandler.typeHandle(monthlySummaryRequest));
    }
 
-   //http://localhost:8080/manager/request/transactions/page?page=0&size=5&sortBy=createdDateTime&sortDirection=desc
+   //http://localhost:8080/manager/request/transactions/page
    @GetMapping("transactions/page")
-   public ResponseEntity<?> findAllPage(
-      @Min(0) @RequestParam(defaultValue = "0") int page,
-      @Min(1) @RequestParam(defaultValue = "5") int size,
-      @RequestParam(defaultValue = "id") String sortBy,
-      @RequestParam(defaultValue = "asc") String sortDirection
-   ) {
-      Sort sort = Sort.by(Sort.Order.by(sortBy).with(Sort.Direction.fromString(sortDirection)));
-      Page<TransactionLoadResponse> transactionPageable = this.transactionUseCase.findAllPage(PageRequest.of(page, size, sort))
+   public ResponseEntity<?> findAllPage(@RequestBody @Valid PaginationRequest paginationRequest) {
+      Sort sort = Sort.by(Sort.Order.by(paginationRequest.getSortBy()).with(Sort.Direction.fromString(paginationRequest.getSortDirection())));
+      Page<TransactionLoadResponse> transactionPageable = this.transactionUseCase.findAllPage(PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize(), sort))
          .map(
             transaction -> TransactionLoadResponse.builder()
                .typeTransaction(transaction.getTypeTransaction())

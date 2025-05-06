@@ -19,26 +19,4 @@ public class GetMonthlySummaryHandler {
    @Autowired
    IdExistenceValidator idExistenceValidator;
 
-   public MonthlySummaryResponse typeHandle(MonthlySummaryRequest monthlySummaryRequest) { //por tipo
-      if (!this.idExistenceValidator.validateExists(UserEntity.class, monthlySummaryRequest.getUserId())) {
-         throw new ServerInternalError("User not found");
-      }
-
-      try {
-         BigDecimal amount = this.transactionRepository.summaryForTypeAndMonthly(
-            monthlySummaryRequest.getType(),
-            monthlySummaryRequest.getUserId(),
-            monthlySummaryRequest.getMonth()
-         );
-         return new MonthlySummaryResponse(
-            monthlySummaryRequest.getType(),
-            amount != null ? amount : BigDecimal.ZERO
-         );
-      } catch (Exception e) {
-         throw new ServerInternalError("Error finding summary for type and monthly");
-      }
-
-
-   }
-   //despues haremos, que retorne un resumen de todos los tipos de transacciones, y no solo por tipo
 }

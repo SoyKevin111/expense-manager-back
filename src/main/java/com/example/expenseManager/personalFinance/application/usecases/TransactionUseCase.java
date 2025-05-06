@@ -58,8 +58,14 @@ public class TransactionUseCase implements ITransactionUseCase {
    }
 
    @Override
-   public BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes) {
-      return this.transactionRepository.summaryForTypeAndMonthly(type, userId, mes);
+   public BigDecimal findFinancialStatusByMonthly(TypeTransaction type, String email, int mes) {
+      try {
+         BigDecimal result = this.transactionRepository.summaryForTypeAndMonthly(type, email, mes);
+         return result != null ? result : BigDecimal.ZERO;
+      } catch (Exception e) {
+         throw new ServerInternalError("Error finding financial status by monthly");
+      }
+
    }
 
    @Override
@@ -82,28 +88,33 @@ public class TransactionUseCase implements ITransactionUseCase {
 
 
    @Override
-   public BigDecimal findCurrentBalance(String email) { //Total Saldo disponible
+   public BigDecimal findCurrentSavings(String email) { //Total Ahorros disponible
       try {
-         return inputSubtractOutput(email, TypeTransaction.INCOME, TypeTransaction.EXPENSE);
+         BigDecimal savingsIn = this.transactionRepository.summaryAmountByType(TypeTransaction.SAVINGS_IN, email); //Ahorros
+         BigDecimal savingsOut = this.transactionRepository.summaryAmountByType(TypeTransaction.SAVINGS_OUT, email); //Ahorros
+         return (savingsIn != null ? savingsIn : BigDecimal.ZERO)
+            .subtract(savingsOut != null ? savingsOut : BigDecimal.ZERO);
       } catch (Exception e) {
          throw new ServerInternalError("Error finding current balance");
       }
    }
 
    @Override
-   public BigDecimal findCurrentSavings(String email) { //Total Ahorros disponibles
+   public BigDecimal findCurrentBalance(String email) { //Total Saldo disponible
       try {
-         return inputSubtractOutput(email, TypeTransaction.SAVINGS_IN, TypeTransaction.SAVINGS_OUT);
+         BigDecimal income = this.transactionRepository.summaryAmountByType(TypeTransaction.INCOME, email); //Ingreso
+         BigDecimal expense = this.transactionRepository.summaryAmountByType(TypeTransaction.EXPENSE, email); //se resta los gastos
+         BigDecimal savingsIn = this.transactionRepository.summaryAmountByType(TypeTransaction.SAVINGS_IN, email); //se resta los ahorros
+         return (income != null ? income : BigDecimal.ZERO)
+            .subtract(expense != null ? expense : BigDecimal.ZERO)
+            .subtract(savingsIn != null ? savingsIn : BigDecimal.ZERO);
       } catch (Exception e) {
          throw new ServerInternalError("Error finding current savings");
       }
    }
 
-   public BigDecimal inputSubtractOutput(String email, TypeTransaction typeIn, TypeTransaction typeOut) {
-      BigDecimal in = this.transactionRepository.summaryAmountByType(typeIn, email);
-      BigDecimal out = this.transactionRepository.summaryAmountByType(typeOut, email);
-      return (in != null ? in : BigDecimal.ZERO)
-         .subtract(out != null ? out : BigDecimal.ZERO);
-   }
-
 }
+/*
+
+
+ */

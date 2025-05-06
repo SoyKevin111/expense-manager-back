@@ -13,7 +13,7 @@ public interface ITransactionUseCase {
     void deleteById(Long id);
     Transaction findById(Long id);
     List<Transaction> findAll();
-    BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes); //ingreso, gasto, entrada de ahorro o salida de ahorro.
+    BigDecimal findFinancialStatusByMonthly(TypeTransaction type, String email, int mes); //ingreso, gasto, entrada de ahorro o salida de ahorro.
     Page<Transaction> findAllPage(Pageable pageable);
     BigDecimal findAmountByType(TypeTransaction typeTransaction, String email);
     BigDecimal findCurrentBalance(String email); //INCOME

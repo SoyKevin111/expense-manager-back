@@ -16,7 +16,7 @@ public interface ITransactionRepository {
    void deleteById(Long id);
    Optional<Transaction> findById(Long id);
    List<Transaction> findAll();
-   BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes); //ingreso, gasto, entrada de ahorro o salida de ahorro.
+   BigDecimal summaryForTypeAndMonthly(TypeTransaction type, String email, int mes); //ingreso, gasto, entrada de ahorro o salida de ahorro.
    BigDecimal summaryAmountByType(TypeTransaction typeTransaction, String email);
     Page<Transaction> findAllPage(Pageable pageable);
 }

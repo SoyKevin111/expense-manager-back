@@ -101,7 +101,7 @@ public class HttpSecurityConfig {
       return http
          .securityMatcher("/manager/request/transactions/**")
          .authorizeHttpRequests(auth ->
-            auth.requestMatchers("/transactions/**").authenticated().anyRequest().permitAll()
+            auth.requestMatchers("/manager/request/transactions/**").authenticated().anyRequest().permitAll()
          )
          .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), BasicAuthenticationFilter.class)
          .build();

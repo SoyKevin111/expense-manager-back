@@ -66,12 +66,18 @@ public class JwtUtils {
    //validacion del token al acceder a algun recurso
    public DecodedJWT validateToken(String token) {
 
+      try {
          System.out.println("validando el token: " + token);
          Algorithm algorithm = Algorithm.HMAC256(this.jwtSecretKey);
          JWTVerifier verifier = JWT.require(algorithm)
             .withIssuer(this.jwtUser)
             .build();
          return verifier.verify(token); //DecodeJWT
+
+      } catch (JWTVerificationException e) {
+         System.err.println("Error al validar el token: " + e.getMessage());
+         throw new UnauthorizedAccessException("Token no valido");
+      }
 
 
    }

@@ -3,6 +3,7 @@ package com.example.expenseManager.personalFinance.infraestructure.adapter.in.re
 import com.example.expenseManager.personalFinance.application.dto.request.CreateTransactionRequest;
 import com.example.expenseManager.personalFinance.application.dto.request.MonthlySummaryRequest;
 import com.example.expenseManager.personalFinance.application.dto.request.TransactionPage;
+import com.example.expenseManager.personalFinance.application.dto.response.FinancialStatusResponse;
 import com.example.expenseManager.personalFinance.application.dto.response.TransactionLoadResponse;
 import com.example.expenseManager.personalFinance.application.handler.GetMonthlySummaryHandler;
 import com.example.expenseManager.personalFinance.application.mapping.CreateTransactionMapping;
@@ -19,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,20 +56,29 @@ public class TransactionController {
    @GetMapping("transactions/balance-and-savings")
    public ResponseEntity<?> findBalanceAndSavings(Authentication authentication) {
       Map<String, BigDecimal> responseSavingsBalance = Map.of(
-         "balance", this.transactionUseCase.findCurrentBalance(authentication.getName()),
-         "savings", this.transactionUseCase.findCurrentSavings(authentication.getName())
+         "currentBalance", this.transactionUseCase.findCurrentBalance(authentication.getName()),
+         "currentSavings", this.transactionUseCase.findCurrentSavings(authentication.getName())
       );
       return ResponseEntity.ok(responseSavingsBalance);
    }
 
-
-   @PostMapping("/transactions/monthly")
-   public ResponseEntity<?> summaryForTypeAndMonthly(@RequestBody @Valid MonthlySummaryRequest monthlySummaryRequest) {
-      return ResponseEntity.ok(monthlySummaryHandler.typeHandle(monthlySummaryRequest));
+   @GetMapping("transactions/finance-status-monthly")
+   public ResponseEntity<?> findFinanceStatusByMonthly(
+      @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().getMonthValue()}") int month,
+      Authentication authentication) {
+      return ResponseEntity.ok(
+         FinancialStatusResponse.builder()
+            .income(this.transactionUseCase.findFinancialStatusByMonthly(TypeTransaction.INCOME, authentication.getName(), month))
+            .expense(this.transactionUseCase.findFinancialStatusByMonthly(TypeTransaction.EXPENSE, authentication.getName(), month))
+            .savingsIn(this.transactionUseCase.findFinancialStatusByMonthly(TypeTransaction.SAVINGS_IN, authentication.getName(), month))
+            .savingsOut(this.transactionUseCase.findFinancialStatusByMonthly(TypeTransaction.SAVINGS_OUT, authentication.getName(), month))
+            .build()
+      );
    }
 
+
    //http://localhost:8080/manager/request/transactions/page
-   @GetMapping("transactions/page")
+   @PostMapping("transactions/page")
    public ResponseEntity<?> findAllPage(@RequestBody @Valid TransactionPage transactionPage) {
       Sort sort = Sort.by(Sort.Order.by(transactionPage.getSortBy()).with(Sort.Direction.fromString(transactionPage.getSortDirection())));
       Page<TransactionLoadResponse> transactionPageable = this.transactionUseCase.findAllPage(PageRequest.of(transactionPage.getPage(), transactionPage.getSize(), sort))
@@ -97,10 +108,6 @@ A hacer:
 
  por hacer:
    obtener todas las transacciones por tipo
-   BigDecimal findAllIncomes()
-   BigDecimal findAllExpenses()
-   BigDecimal findAllSavingsIn()
-   BigDecimal findAllSavingsOut()
 
    BigDecimal findAmounthBytype(TypeTransaction typeTransaction); //INCOME
 

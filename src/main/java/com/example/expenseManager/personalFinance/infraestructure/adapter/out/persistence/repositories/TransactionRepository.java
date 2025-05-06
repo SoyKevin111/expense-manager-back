@@ -59,8 +59,8 @@ public class TransactionRepository implements ITransactionRepository {
    }
 
    @Override
-   public BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes) {
-      return this.transactionRepository.summaryForTypeAndMonthly(type, userId, mes);
+   public BigDecimal summaryForTypeAndMonthly(TypeTransaction type, String email, int mes) {
+      return this.transactionRepository.summaryForTypeAndMonthly(type, email, mes);
    }
 
    @Override

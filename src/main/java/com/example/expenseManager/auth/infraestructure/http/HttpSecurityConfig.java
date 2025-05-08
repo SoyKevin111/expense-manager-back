@@ -99,8 +99,13 @@ public class HttpSecurityConfig {
       applyCommonConfig(http);
       return http
          .securityMatcher("/manager/request/transactions/**")
-         .authorizeHttpRequests(auth ->
-            auth.requestMatchers("/manager/request/transactions/**").authenticated().anyRequest().permitAll()
+         .authorizeHttpRequests(auth -> {
+               auth.requestMatchers(HttpMethod.POST, "/manager/request/transactions").hasAnyRole("ADMIN", "USER");
+               auth.requestMatchers(HttpMethod.GET, "/manager/request/transactions/balance-and-savings").hasAnyRole("ADMIN", "USER");
+               auth.requestMatchers(HttpMethod.GET, "/manager/request/transactions/finance-status-monthly").hasAnyRole("ADMIN", "USER");
+               auth.requestMatchers(HttpMethod.POST, "/manager/request/transactions/page").hasAnyRole("ADMIN", "USER");
+               auth.anyRequest().denyAll();
+            }
          )
          .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), BasicAuthenticationFilter.class)
          .build();

@@ -1,4 +1,4 @@
-package com.example.expenseManager.auth.infraestructure.util;
+package com.example.expenseManager.auth.application.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -15,20 +15,22 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
+@Getter
+@Setter
 public class JwtUtils {
    Dotenv dotenv = Dotenv.load(); //desde el .env
 
-   @Getter
-   @Setter
    private String jwtSecretKey;
-   @Getter
-   @Setter
    private String jwtUser;
+   private Instant now = Instant.now();
+   private Instant expirationTime = now.plus(30, ChronoUnit.MINUTES); //30 minutos
 
    public JwtUtils() {
       this.jwtSecretKey = dotenv.get("JWT_SECRET_KEY");
@@ -51,8 +53,8 @@ public class JwtUtils {
             .withIssuer(this.jwtUser) //autor
             .withSubject(email)
             .withClaim("authorities", authorities)
-            .withIssuedAt(new Date())
-            .withExpiresAt(new Date(System.currentTimeMillis() + 1800000)) //30 minutos
+            .withIssuedAt(Date.from(now))
+            .withExpiresAt(Date.from(expirationTime)) //30 minutos
             .withJWTId(UUID.randomUUID().toString())
             .withNotBefore(new Date(System.currentTimeMillis()))
             .sign(algorithm);
@@ -76,7 +78,7 @@ public class JwtUtils {
 
       } catch (JWTVerificationException e) {
          System.err.println("Error al validar el token: " + e.getMessage());
-         throw new UnauthorizedAccessException("Token no valido");
+         throw new UnauthorizedAccessException("Token no valido: " + e.getMessage());
       }
 
 

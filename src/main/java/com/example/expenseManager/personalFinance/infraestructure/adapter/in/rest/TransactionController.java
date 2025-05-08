@@ -1,11 +1,9 @@
 package com.example.expenseManager.personalFinance.infraestructure.adapter.in.rest;
 
 import com.example.expenseManager.personalFinance.application.dto.request.CreateTransactionRequest;
-import com.example.expenseManager.personalFinance.application.dto.request.MonthlySummaryRequest;
 import com.example.expenseManager.personalFinance.application.dto.request.TransactionPage;
 import com.example.expenseManager.personalFinance.application.dto.response.FinancialStatusResponse;
 import com.example.expenseManager.personalFinance.application.dto.response.TransactionLoadResponse;
-import com.example.expenseManager.personalFinance.application.handler.GetMonthlySummaryHandler;
 import com.example.expenseManager.personalFinance.application.mapping.CreateTransactionMapping;
 import com.example.expenseManager.personalFinance.domain.models.Transaction;
 import com.example.expenseManager.personalFinance.domain.models.TypeTransaction;
@@ -20,8 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -33,13 +29,12 @@ public class TransactionController {
    ITransactionUseCase transactionUseCase;
    @Autowired
    CreateTransactionMapping createTransactionMapping;
-   @Autowired
-   GetMonthlySummaryHandler monthlySummaryHandler;
+
 
    @PostMapping("/transactions")
-   public ResponseEntity<?> createTransaction(@RequestBody @Valid CreateTransactionRequest transactionRequest) {
-      Transaction transactionResponse = this.createTransactionMapping.toDomainModel(transactionRequest);
-      Transaction transaction = this.transactionUseCase.create(transactionResponse);
+   public ResponseEntity<?> saveTransaction(@RequestBody @Valid CreateTransactionRequest transactionRequest, Authentication authentication) {
+      Transaction transactionResponse = this.createTransactionMapping.toDomainModel(transactionRequest, authentication.getName());
+      Transaction transaction = this.transactionUseCase.save(transactionResponse);
       return ResponseEntity.ok(
          TransactionLoadResponse.builder()
             .id(transaction.getId())
@@ -57,7 +52,7 @@ public class TransactionController {
    public ResponseEntity<?> findBalanceAndSavings(Authentication authentication) {
       Map<String, BigDecimal> responseSavingsBalance = Map.of(
          "currentBalance", this.transactionUseCase.findCurrentBalance(authentication.getName()),
-         "currentSavings", this.transactionUseCase.findCurrentSavings(authentication.getName())
+         "availableSavings", this.transactionUseCase.findAvailableSavings(authentication.getName())
       );
       return ResponseEntity.ok(responseSavingsBalance);
    }

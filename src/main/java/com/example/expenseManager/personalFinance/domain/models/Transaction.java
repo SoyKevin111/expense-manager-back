@@ -4,7 +4,7 @@ import com.example.expenseManager.user.domain.User;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Transaction {
    Long id;
    BigDecimal amount;
-   LocalDate createdAt;
+   LocalDateTime createdDateTime;
    TypeTransaction typeTransaction;
    User user;
    Category category;

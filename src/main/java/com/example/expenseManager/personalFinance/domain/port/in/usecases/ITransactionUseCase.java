@@ -6,13 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public interface ITransactionUseCase {
-    Transaction create(Transaction transaction);
-    void deleteById(Long id);
+    Transaction save(Transaction transaction); //guardar cualquier tipo de transaccion
     Transaction findById(Long id);
-    List<Transaction> findAll();
-    BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes); //ingreso, gasto, entrada de ahorro o salida de ahorro.
-    Page<Transaction> findAllPage(Pageable pageable);
+    BigDecimal findFinancialStatusByMonthly(TypeTransaction type, String email, int mes); //Pie chart
+    Page<Transaction> findAllPage(Pageable pageable); //transacciones
+    BigDecimal findAmountByType(TypeTransaction typeTransaction, String email); //monto por tipo
+    BigDecimal findCurrentBalance(String email); //saldo actual
+    BigDecimal findAvailableSavings(String email); //ahorros disponibles
 }

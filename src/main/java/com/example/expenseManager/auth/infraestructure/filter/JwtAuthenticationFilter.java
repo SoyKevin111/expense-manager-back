@@ -1,8 +1,7 @@
 package com.example.expenseManager.auth.infraestructure.filter;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.expenseManager.auth.infraestructure.util.JwtUtils;
+import com.example.expenseManager.auth.application.util.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -41,41 +39,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
          String jwtToken = authorizationHeader.substring(7);
 
-         try {
-            DecodedJWT decodedJWT = jwtUtils.validateToken(jwtToken);
+         DecodedJWT decodedJWT = jwtUtils.validateToken(jwtToken);
 
-            String email = jwtUtils.extractEmail(decodedJWT);
-            String authoritiesClaim = jwtUtils.getSpecificClaim(decodedJWT, "authorities").asString();
+         String email = jwtUtils.extractEmail(decodedJWT);
+         String authoritiesClaim = jwtUtils.getSpecificClaim(decodedJWT, "authorities").asString();
 
-            Collection<? extends GrantedAuthority> authorities =
-               AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim);
+         Collection<? extends GrantedAuthority> authorities =
+            AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim);
 
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+         SecurityContext context = SecurityContextHolder.createEmptyContext();
+         Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
 
-            context.setAuthentication(authentication);
-            SecurityContextHolder.setContext(context);
-         } catch (JWTVerificationException ex) {
-            JWTVerificationException(ex.getMessage(), response);
-            return;
-         }
+         context.setAuthentication(authentication);
+         SecurityContextHolder.setContext(context);
+
 
       }
       filterChain.doFilter(request, response);
-   }
-
-   public void JWTVerificationException(String message, HttpServletResponse response) throws IOException {
-      String json = "{"
-         + "\"timestamp\": \"" + LocalDateTime.now() + "\","
-         + "\"status\": " + HttpServletResponse.SC_UNAUTHORIZED + ","
-         + "\"error\": \"[Unauthorized Error xd]\","
-         + "\"message\": \"" + message + "\""
-         + "}";
-
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.setContentType("application/json");
-      response.setCharacterEncoding("UTF-8");
-      response.getWriter().write(json);
    }
 
 

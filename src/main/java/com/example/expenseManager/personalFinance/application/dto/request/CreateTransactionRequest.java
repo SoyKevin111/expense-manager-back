@@ -19,9 +19,6 @@ public class CreateTransactionRequest {
    @NotNull(message = "Transaction type cannot be null")
    private TypeTransaction typeTransaction;
 
-   @NotNull(message = "User ID cannot be null")
-   private Long userId;
-
    @NotNull(message = "Category ID cannot be null")
    private Long categoryId;
 }

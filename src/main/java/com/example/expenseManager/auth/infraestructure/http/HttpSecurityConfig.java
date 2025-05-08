@@ -1,7 +1,7 @@
 package com.example.expenseManager.auth.infraestructure.http;
 
 import com.example.expenseManager.auth.application.service.UserAuthService;
-import com.example.expenseManager.auth.infraestructure.util.JwtUtils;
+import com.example.expenseManager.auth.application.util.JwtUtils;
 import com.example.expenseManager.auth.infraestructure.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -90,6 +89,24 @@ public class HttpSecurityConfig {
             auth.requestMatchers(HttpMethod.DELETE, "/manager/request/users").hasRole("ADMIN");
             auth.anyRequest().denyAll();//denegamos el acceso a cualquier otro endpoint
          })
+         .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), BasicAuthenticationFilter.class)
+         .build();
+   }
+
+   @Bean
+   @Order(3)
+   public SecurityFilterChain transactionsSecurity(HttpSecurity http) throws Exception {
+      applyCommonConfig(http);
+      return http
+         .securityMatcher("/manager/request/transactions/**")
+         .authorizeHttpRequests(auth -> {
+               auth.requestMatchers(HttpMethod.POST, "/manager/request/transactions").hasAnyRole("ADMIN", "USER");
+               auth.requestMatchers(HttpMethod.GET, "/manager/request/transactions/balance-and-savings").hasAnyRole("ADMIN", "USER");
+               auth.requestMatchers(HttpMethod.GET, "/manager/request/transactions/finance-status-monthly").hasAnyRole("ADMIN", "USER");
+               auth.requestMatchers(HttpMethod.POST, "/manager/request/transactions/page").hasAnyRole("ADMIN", "USER");
+               auth.anyRequest().denyAll();
+            }
+         )
          .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), BasicAuthenticationFilter.class)
          .build();
    }

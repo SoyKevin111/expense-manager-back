@@ -7,13 +7,10 @@ import com.example.expenseManager.personalFinance.domain.port.in.usecases.ITrans
 import com.example.expenseManager.personalFinance.domain.port.out.repositories.ITransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class TransactionUseCase implements ITransactionUseCase {
@@ -22,20 +19,27 @@ public class TransactionUseCase implements ITransactionUseCase {
    ITransactionRepository transactionRepository;
 
    @Override
-   public Transaction create(Transaction transaction) {
+   public Transaction save(Transaction transaction) {
+
+      switch (transaction.getTypeTransaction()) {
+         case EXPENSE, SAVINGS_IN -> {
+            BigDecimal result = this.findCurrentBalance(transaction.getUser().getEmail());
+            if (result.compareTo(transaction.getAmount()) < 0) {
+               throw new ServerInternalError("Insufficient funds for this transaction");
+            }
+         }
+         case SAVINGS_OUT -> {
+            BigDecimal result = this.findAvailableSavings(transaction.getUser().getEmail());
+            if (result.compareTo(transaction.getAmount()) < 0) {
+               throw new ServerInternalError("Insufficient funds for this transaction");
+            }
+         }
+      }
+
       try {
          return this.transactionRepository.save(transaction);
       } catch (Exception ex) {
          throw new ServerInternalError("Error creating transaction");
-      }
-   }
-
-   @Override
-   public void deleteById(Long id) {
-      try {
-         this.transactionRepository.deleteById(id);
-      } catch (Exception e) {
-         throw new ServerInternalError("Error deleting transaction");
       }
    }
 
@@ -50,17 +54,14 @@ public class TransactionUseCase implements ITransactionUseCase {
    }
 
    @Override
-   public List<Transaction> findAll() {
+   public BigDecimal findFinancialStatusByMonthly(TypeTransaction type, String email, int mes) {
       try {
-         return this.transactionRepository.findAll();
+         BigDecimal result = this.transactionRepository.summaryForTypeAndMonthly(type, email, mes);
+         return result != null ? result : BigDecimal.ZERO;
       } catch (Exception e) {
-         throw new ServerInternalError("Error finding all transactions");
+         throw new ServerInternalError("Error finding financial status by monthly");
       }
-   }
 
-   @Override
-   public BigDecimal summaryForTypeAndMonthly(TypeTransaction type, Long userId, int mes) {
-      return this.transactionRepository.summaryForTypeAndMonthly(type, userId, mes);
    }
 
    @Override
@@ -71,4 +72,35 @@ public class TransactionUseCase implements ITransactionUseCase {
          throw new ServerInternalError("Error finding all transactions with pagination");
       }
    }
+
+   @Override
+   public BigDecimal findAmountByType(TypeTransaction typeTransaction, String email) {
+      try {
+         return transactionRepository.summaryAmountByType(typeTransaction, email);
+      } catch (Exception e) {
+         throw new ServerInternalError("Error finding amount by type: " + typeTransaction);
+      }
+   }
+
+
+   @Override
+   public BigDecimal findCurrentBalance(String email) { //Total Saldo disponible
+      BigDecimal income = this.transactionRepository.summaryAmountByType(TypeTransaction.INCOME, email);
+      BigDecimal expense = this.transactionRepository.summaryAmountByType(TypeTransaction.EXPENSE, email);
+      BigDecimal savingsIn = this.transactionRepository.summaryAmountByType(TypeTransaction.SAVINGS_IN, email);
+      return income.subtract(expense).subtract(savingsIn);
+   }
+
+   @Override
+   public BigDecimal findAvailableSavings(String email) { //Total Ahorros disponible
+      BigDecimal savingsIn = this.transactionRepository.summaryAmountByType(TypeTransaction.SAVINGS_IN, email);
+      BigDecimal savingsOut = this.transactionRepository.summaryAmountByType(TypeTransaction.SAVINGS_OUT, email);
+      return savingsIn.subtract(savingsOut);
+   }
+
+
 }
+/*
+
+
+ */

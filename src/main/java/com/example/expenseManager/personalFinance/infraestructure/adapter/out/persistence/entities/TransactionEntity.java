@@ -8,6 +8,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "transaction")
@@ -24,9 +26,9 @@ public class TransactionEntity {
    @NotNull(message = "Amount cannot be null")
    BigDecimal amount;
 
-   @Column(name = "created_at")
-   @NotNull(message = "createdAt cannot be null")
-   LocalDate createdAt;
+   @Column(name = "created_date_time")
+   @NotNull(message = "createdDateTime cannot be null")
+   LocalDateTime createdDateTime;
 
    @Enumerated(EnumType.STRING)
    @Column(name = "type_transaction")
@@ -40,5 +42,7 @@ public class TransactionEntity {
    @ManyToOne
    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
    CategoryEntity category;
+
+
 
 }

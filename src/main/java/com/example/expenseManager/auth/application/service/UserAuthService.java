@@ -3,7 +3,7 @@ package com.example.expenseManager.auth.application.service;
 import com.example.expenseManager.auth.application.dto.AuthLoginUserRequest;
 import com.example.expenseManager.auth.application.dto.AuthRegisterUserRequest;
 import com.example.expenseManager.auth.application.dto.AuthResponse;
-import com.example.expenseManager.auth.infraestructure.util.JwtUtils;
+import com.example.expenseManager.auth.application.util.JwtUtils;
 import com.example.expenseManager.core.application.exceptions.models.UnauthorizedAccessException;
 import com.example.expenseManager.core.application.mappers.EntityGeneralMapper;
 import com.example.expenseManager.user.domain.RoleEnum;

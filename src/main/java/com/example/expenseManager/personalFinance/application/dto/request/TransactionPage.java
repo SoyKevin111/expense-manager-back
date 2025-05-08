@@ -1,17 +1,14 @@
-package com.example.expenseManager.core.application.dto;
+package com.example.expenseManager.personalFinance.application.dto.request;
 
-import com.example.expenseManager.core.application.exceptions.models.ServerInternalError;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class PagesRequest {
+public class TransactionPage {
 
    @NotNull(message = "Page number cannot be null")
    int page;
@@ -19,6 +16,7 @@ public class PagesRequest {
    //opcional
    int size;
    String sortBy;
+   String sortDirection;
 
    public int getSize() {
       if (this.size < 1 || this.size > 5) {
@@ -30,7 +28,13 @@ public class PagesRequest {
    public String getSortBy() {
       return this.sortBy == null || this.sortBy.isBlank() ? "id" : this.sortBy;
    }
+
+   public String getSortDirection() {
+      return this.sortDirection == null || this.sortDirection.isBlank() ? "asc" : this.sortDirection;
+   }
+
 }
+
 
 /*
     {
